@@ -6,8 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import stream.nolambda.karma.KarmaPresenter
 
-abstract class ActivityScreen : AppCompatActivity(),
-    ContextProvider {
+abstract class ActivityScreen : AppCompatActivity(), ContextProvider {
 
     private val presenterHolder: PresenterHolder by lazy {
         ViewModelProvider(this).get(PresenterHolder::class.java)
