@@ -1,10 +1,11 @@
 package stream.nolambda.karma
 
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 
-abstract class StatePresenter<STATE> : KarmaAction<STATE> {
+class Action<STATE>(private val initialState: () -> STATE) : KarmaAction<STATE> {
 
     private val stateLiveData: MutableLiveData<STATE> = MutableLiveData()
     private val executor = Karma.executor
@@ -13,16 +14,13 @@ abstract class StatePresenter<STATE> : KarmaAction<STATE> {
 
     private var stateHolder: STATE? = null
 
-    internal open fun onAttach() {
-        // no-op
-    }
-
-    fun attach(lifecycleOwner: LifecycleOwner, onState: (STATE) -> Unit) {
-        stateLiveData.observe(lifecycleOwner, Observer {
-            onState.invoke(it)
+    override fun attach(owner: LifecycleOwner, onStateChange: (STATE) -> Unit) {
+        if (owner.lifecycle.currentState.isAtLeast(Lifecycle.State.INITIALIZED)) {
+            onStateChange.invoke(currentState)
+        }
+        stateLiveData.observe(owner, Observer {
+            onStateChange.invoke(it)
         })
-
-        onAttach()
     }
 
     private fun createNewState(stateModifier: () -> STATE): Pair<Boolean, STATE> {

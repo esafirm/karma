@@ -1,4 +1,4 @@
-package stream.nolambda.karma
+package stream.nolambda.karma.ui
 
 import android.content.Context
 import android.graphics.drawable.Drawable

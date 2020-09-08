@@ -1,9 +1,10 @@
-package stream.nolambda.karma
+package stream.nolambda.karma.ui
 
 import android.content.Context
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import stream.nolambda.karma.KarmaPresenter
 
 abstract class ActivityScreen : AppCompatActivity(),
     ContextProvider {
@@ -26,7 +27,7 @@ abstract class ActivityScreen : AppCompatActivity(),
         get() = this
 
     @Suppress("UNCHECKED_CAST")
-    fun <T : StatePresenter<*>> createPresenter(block: () -> T): T {
+    fun <T : KarmaPresenter<*>> createPresenter(block: () -> T): T {
         val currentPresenter = presenterHolder.presenter ?: block()
         presenterHolder.presenter = currentPresenter
         return currentPresenter as T

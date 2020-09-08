@@ -4,18 +4,31 @@ import nolambda.github.usersearch.data.Api
 import nolambda.github.usersearch.data.ApiInterface
 import nolambda.github.usersearch.data.User
 import nolambda.github.usersearch.utils.call
-import stream.nolambda.karma.StatePresenter
+import stream.nolambda.karma.Action
+import stream.nolambda.karma.KarmaAction
 import stream.nolambda.karma.asSingleEvent
+import stream.nolambda.karma.timetravel.TimeTravelAction
+import stream.nolambda.karma.timetravel.TimeTravelActionImpl
+import stream.nolambda.karma.ui.UiPresenter
 
 class UserSearchPresenter(
+    private val action: KarmaAction<UserSearchState> = TimeTravelActionImpl(Action { UserSearchState() }),
     private val api: ApiInterface = Api()
-) : StatePresenter<UserSearchState>() {
+) : UiPresenter<UserSearchState>(action), TimeTravelAction {
 
     companion object {
         const val FIRST_PAGE = 1
     }
 
-    override fun initialState(): UserSearchState = UserSearchState()
+    override fun forward() {
+        action as TimeTravelAction
+        action.forward()
+    }
+
+    override fun back() {
+        action as TimeTravelAction
+        action.back()
+    }
 
     private fun showNextPage(users: List<User>) = action {
         name = { "Show next page" }
@@ -40,7 +53,7 @@ class UserSearchPresenter(
     }
 
     private fun showEmptyPage() = action {
-        setState { initialState() }
+        setState { UserSearchState() }
     }
 
     private fun setSearchState(isLoadingFirstPage: Boolean, lastQuery: String) = action {
@@ -48,8 +61,8 @@ class UserSearchPresenter(
     }
 
     fun loadNextPage() {
-        val lastQuery = currentState.lastQuery
-        val requestedPage = currentState.currentPage + 1
+        val lastQuery = action.currentState.lastQuery
+        val requestedPage = action.currentState.currentPage + 1
         search(lastQuery, requestedPage)
     }
 
