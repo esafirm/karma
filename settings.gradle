@@ -1,4 +1,4 @@
 include ':karma-timetravel'
 include ':karma-core'
-include ':app'
+include ':samples:app'
 rootProject.name = "Github User Search"
