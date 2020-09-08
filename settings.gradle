@@ -1,3 +1,4 @@
+include ':karma-differ'
 include ':karma-timetravel'
 include ':karma-core'
 include ':samples:app'

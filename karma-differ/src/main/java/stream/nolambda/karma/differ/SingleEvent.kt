@@ -1,4 +1,4 @@
-package stream.nolambda.karma
+package stream.nolambda.karma.differ
 
 class SingleEvent<out T>(private val value: T) {
     private var fetched: Boolean = false

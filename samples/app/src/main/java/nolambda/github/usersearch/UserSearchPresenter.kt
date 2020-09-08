@@ -6,13 +6,13 @@ import nolambda.github.usersearch.data.User
 import nolambda.github.usersearch.utils.call
 import stream.nolambda.karma.Action
 import stream.nolambda.karma.KarmaAction
-import stream.nolambda.karma.asSingleEvent
+import stream.nolambda.karma.differ.asSingleEvent
+import stream.nolambda.karma.timetravel.TimeTravel
 import stream.nolambda.karma.timetravel.TimeTravelAction
-import stream.nolambda.karma.timetravel.TimeTravelActionImpl
 import stream.nolambda.karma.ui.UiPresenter
 
 class UserSearchPresenter(
-    private val action: KarmaAction<UserSearchState> = TimeTravelActionImpl(Action { UserSearchState() }),
+    private val action: KarmaAction<UserSearchState> = TimeTravel(Action { UserSearchState() }),
     private val api: ApiInterface = Api()
 ) : UiPresenter<UserSearchState>(action), TimeTravelAction {
 

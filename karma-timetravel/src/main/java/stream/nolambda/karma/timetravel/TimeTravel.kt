@@ -5,7 +5,7 @@ import stream.nolambda.karma.KarmaAction
 import stream.nolambda.karma.KarmaContextBuilder
 import stream.nolambda.karma.utils.KarmaLogger
 
-class TimeTravelActionImpl<STATE>(
+class TimeTravel<STATE>(
     private val _action: KarmaAction<STATE>
 ) : TimeTravelAction, KarmaAction<STATE> {
 

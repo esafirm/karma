@@ -5,7 +5,7 @@ import kotlinx.android.synthetic.main.screen_user_search.*
 import nolambda.github.usersearch.utils.onTextChange
 import nolambda.github.usersearch.utils.setVisible
 import nolambda.kommonadapter.attach
-import stream.nolambda.karma.fetch
+import stream.nolambda.karma.differ.renderer
 import stream.nolambda.karma.ui.ActivityScreen
 import stream.nolambda.karma.ui.xml
 
@@ -20,7 +20,7 @@ class UserSearchScreen : ActivityScreen() {
     override fun createView() = xml(R.layout.screen_user_search)
 
     override fun onViewCreated() {
-        presenter.attach(this, ::render)
+        presenter.attach(this, renderer::render)
 
         recycler.attach(
             adapter = adapter,
@@ -40,14 +40,16 @@ class UserSearchScreen : ActivityScreen() {
         }
     }
 
-    private fun render(state: UserSearchState) {
-        recycler.setVisible(state.isLoading.not(), animate = true)
-        progressBar.setVisible(state.isLoading, animate = true)
-
-        adapter.pushData(state.users)
-
-        state.err?.fetch {
-            Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
+    private val renderer = renderer<UserSearchState> {
+        diff(UserSearchState::isLoading) {
+            recycler.setVisible(it.not(), animate = true)
+            progressBar.setVisible(it, animate = true)
+        }
+        event(UserSearchState::err) {
+            Toast.makeText(applicationContext, it.message, Toast.LENGTH_SHORT).show()
+        }
+        always {
+            adapter.pushData(it.users)
         }
     }
 }
