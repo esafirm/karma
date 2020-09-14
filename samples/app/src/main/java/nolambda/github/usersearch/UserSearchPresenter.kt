@@ -30,34 +30,25 @@ class UserSearchPresenter(
         action.back()
     }
 
-    private fun showNextPage(newUsers: List<User>) = action {
-        name = { "Show next page" }
-        setState {
-            val newList = (users + newUsers).distinctBy { u -> u.login }
-            copy(users = newList, currentPage = currentPage + 1, isLoading = false)
-        }
+    private fun showNextPage(newUsers: List<User>) = setState {
+        val newList = (users + newUsers).distinctBy { u -> u.login }
+        copy(users = newList, currentPage = currentPage + 1, isLoading = false)
     }
 
-    private fun showInitialPage(users: List<User>) = action {
-        name = { "Show initial page" }
-        setState {
-            copy(users = users, currentPage = FIRST_PAGE, isLoading = false)
-        }
+    private fun showInitialPage(users: List<User>) = setState {
+        copy(users = users, currentPage = FIRST_PAGE, isLoading = false)
     }
 
-    private fun showError(err: Throwable) = action {
-        name = { "Show error" }
-        setState {
-            copy(err = err.asSingleEvent(), isLoading = false)
-        }
+    private fun showError(err: Throwable) = setState {
+        copy(err = err.asSingleEvent(), isLoading = false)
     }
 
-    private fun showEmptyPage() = action {
-        setState { UserSearchState() }
+    private fun showEmptyPage() = execute {
+        set { UserSearchState() }
     }
 
-    private fun setSearchState(isLoadingFirstPage: Boolean, lastQuery: String) = action {
-        setState { copy(isLoading = isLoadingFirstPage, lastQuery = lastQuery) }
+    private fun setSearchState(isLoadingFirstPage: Boolean, lastQuery: String) = execute {
+        set { copy(isLoading = isLoadingFirstPage, lastQuery = lastQuery) }
     }
 
     fun loadNextPage() {

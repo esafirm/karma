@@ -34,7 +34,7 @@ class Action<STATE>(private val initialState: () -> STATE) : KarmaAction<STATE> 
         return KarmaContextBuilder(currentState).apply(block).build()
     }
 
-    override fun action(block: KarmaContextBuilder<STATE>.() -> Unit) {
+    override fun execute(block: KarmaContextBuilder<STATE>.() -> Unit) {
         executor.execute {
             val context = createNextContext(block)
             val (isTheSame, state) = createNewState(context.stateChange)

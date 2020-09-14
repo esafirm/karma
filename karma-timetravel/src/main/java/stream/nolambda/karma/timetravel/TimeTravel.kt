@@ -61,7 +61,7 @@ class TimeTravel<STATE>(
     override val currentState: STATE
         get() = _action.currentState
 
-    override fun action(block: KarmaContextBuilder<STATE>.() -> Unit) {
-        _action.action(block)
+    override fun execute(block: KarmaContextBuilder<STATE>.() -> Unit) {
+        _action.execute(block)
     }
 }

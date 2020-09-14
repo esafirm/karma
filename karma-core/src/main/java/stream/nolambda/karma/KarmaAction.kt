@@ -16,7 +16,7 @@ class KarmaContextBuilder<T>(private val currentState: T) {
     var name: NameResolver = { "" }
     private var stateChange: StateChange<T>? = null
 
-    fun setState(change: StateChangeBuilder<T>) {
+    fun set(change: StateChangeBuilder<T>) {
         this.stateChange = { change.invoke(currentState) }
     }
 
@@ -30,9 +30,5 @@ interface KarmaPresenter<STATE> {
 
 interface KarmaAction<STATE> : KarmaPresenter<STATE> {
     val currentState: STATE
-    fun action(block: KarmaContextBuilder<STATE>.() -> Unit)
-
-    operator fun invoke(block: KarmaContextBuilder<STATE>.() -> Unit) {
-        action(block)
-    }
+    fun execute(block: KarmaContextBuilder<STATE>.() -> Unit)
 }
