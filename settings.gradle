@@ -1,4 +1,4 @@
-include ':karma-differ'
+include ':karma-renderer'
 include ':karma-timetravel'
 include ':karma-core'
 include ':samples:app'
