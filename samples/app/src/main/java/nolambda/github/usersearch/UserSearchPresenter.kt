@@ -30,10 +30,10 @@ class UserSearchPresenter(
         action.back()
     }
 
-    private fun showNextPage(users: List<User>) = action {
+    private fun showNextPage(newUsers: List<User>) = action {
         name = { "Show next page" }
         setState {
-            val newList = (users + users).distinctBy { u -> u.login }
+            val newList = (users + newUsers).distinctBy { u -> u.login }
             copy(users = newList, currentPage = currentPage + 1, isLoading = false)
         }
     }
