@@ -1,5 +1,6 @@
 package nolambda.github.usersearch
 
+import androidx.lifecycle.LifecycleOwner
 import nolambda.github.usersearch.data.Api
 import nolambda.github.usersearch.data.ApiInterface
 import nolambda.github.usersearch.data.User
@@ -9,25 +10,20 @@ import stream.nolambda.karma.KarmaAction
 import stream.nolambda.karma.differ.asSingleEvent
 import stream.nolambda.karma.timetravel.TimeTravel
 import stream.nolambda.karma.timetravel.TimeTravelAction
+import stream.nolambda.karma.timetravel.TimeTravelEventListener
 import stream.nolambda.karma.ui.UiPresenter
 
 class UserSearchPresenter(
     private val action: KarmaAction<UserSearchState> = TimeTravel(Action { UserSearchState() }),
     private val api: ApiInterface = Api()
-) : UiPresenter<UserSearchState>(action), TimeTravelAction {
+) : UiPresenter<UserSearchState>(action), TimeTravelEventListener {
 
     companion object {
         const val FIRST_PAGE = 1
     }
 
-    override fun forward() {
-        action as TimeTravelAction
-        action.forward()
-    }
-
-    override fun back() {
-        action as TimeTravelAction
-        action.back()
+    override fun onAttach(owner: LifecycleOwner) {
+        bindTimeTravel(owner, action as TimeTravelAction)
     }
 
     private fun showNextPage(newUsers: List<User>) = setState {
@@ -43,12 +39,10 @@ class UserSearchPresenter(
         copy(err = err.asSingleEvent(), isLoading = false)
     }
 
-    private fun showEmptyPage() = execute {
-        set { UserSearchState() }
-    }
+    private fun showEmptyPage() = setState { UserSearchState() }
 
-    private fun setSearchState(isLoadingFirstPage: Boolean, lastQuery: String) = execute {
-        set { copy(isLoading = isLoadingFirstPage, lastQuery = lastQuery) }
+    private fun setSearchState(isLoadingFirstPage: Boolean, lastQuery: String) = setState {
+        copy(isLoading = isLoadingFirstPage, lastQuery = lastQuery)
     }
 
     fun loadNextPage() {

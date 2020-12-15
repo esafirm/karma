@@ -9,6 +9,8 @@ import nolambda.kommonadapter.attach
 import stream.nolambda.karma.Karma
 import stream.nolambda.karma.differ.ViewRenderer
 import stream.nolambda.karma.differ.renderer
+import stream.nolambda.karma.timetravel.TimeTravelEvent
+import stream.nolambda.karma.timetravel.TimeTravelEventManager
 import stream.nolambda.karma.ui.ActivityScreen
 import stream.nolambda.karma.ui.xml
 
@@ -38,11 +40,11 @@ class UserSearchRenderer(view: View) : ViewRenderer<UserSearchState, UserSearchP
             )
 
             view.btnBack.setOnClickListener {
-                back()
+                TimeTravelEventManager.dispatchEvent(TimeTravelEvent.Backward)
             }
 
             view.btnForward.setOnClickListener {
-                forward()
+                TimeTravelEventManager.dispatchEvent(TimeTravelEvent.Forward)
             }
 
             view.inpSearch.onTextChange(debounceTime = 300) { query ->

@@ -10,14 +10,14 @@ abstract class UiPresenter<STATE>(
     private val action: KarmaAction<STATE>
 ) : KarmaPresenter<STATE> {
 
-    open fun onAttach() {
+    open fun onAttach(owner: LifecycleOwner) {
         // no-op
     }
 
     override fun attach(owner: LifecycleOwner, onStateChange: (STATE) -> Unit) {
         action.attach(owner, onStateChange)
 
-        onAttach()
+        onAttach(owner)
     }
 
     /* --------------------------------------------------- */

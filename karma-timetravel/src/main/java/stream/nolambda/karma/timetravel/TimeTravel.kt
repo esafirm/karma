@@ -43,8 +43,8 @@ class TimeTravel<STATE>(
     private fun setState(currentState: STATE) {
         KarmaLogger.log { "CurrentState $currentState" }
 
-        _action {
-            setState { currentState }
+        _action.execute {
+            set { currentState }
         }
     }
 
