@@ -40,6 +40,13 @@ class TimeTravel<STATE>(
         setState(timeline.elementAt(index - 1))
     }
 
+    /**
+     * This is used for time travel dashboard
+     * @return collection of the state (timeline)
+     */
+    @Suppress("UNCHECKED_CAST")
+    override fun getTimeline(): List<Any> = timeline.toList() as List<Any>
+
     private fun setState(currentState: STATE) {
         KarmaLogger.log { "CurrentState $currentState" }
 

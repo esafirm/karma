@@ -4,35 +4,39 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import stream.nolambda.karma.Karma
 import stream.nolambda.karma.differ.renderer
-import stream.nolambda.karma.timetravel.dashboard.databinding.ActivityTimetravelDashboardBinding
-import stream.nolambda.karma.ui.ActivityScreen
-import stream.nolambda.karma.ui.ScreenViewProvider
+import stream.nolambda.karma.timetravel.dashboard.databinding.FragmentTimetravelDashboardBinding
 
-class TimeTravelDashboard : ActivityScreen() {
+class TimeTravelDashboard : Fragment() {
 
-    private lateinit var binding: ActivityTimetravelDashboardBinding
-
-    override fun createView(): ScreenViewProvider = { inflater, _ ->
-        binding = ActivityTimetravelDashboardBinding.inflate(inflater)
-        binding.root
-    }
-
-    override fun onViewCreated(view: View) {
-        val renderer = renderer<TimeTravelDashboardState, TimeTravelPresenter> {
-            init {
-                binding.root.setBackgroundColor(Color.BLACK)
-            }
-        }
-
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        val binding = FragmentTimetravelDashboardBinding.inflate(inflater, container, false)
+        val renderer = createRenderer(binding)
         Karma.bind(
-            owner = this,
+            lifecycleOwner = viewLifecycleOwner,
+            viewModelStoreOwner = this,
             presenterCreator = { TimeTravelPresenter() },
             render = renderer::render
         )
+        return binding.root
     }
+
+    private fun createRenderer(binding: FragmentTimetravelDashboardBinding) =
+        renderer<TimeTravelDashboardState, TimeTravelPresenter> {
+            init {
+
+            }
+        }
 
     companion object {
         fun start(context: Context) {
