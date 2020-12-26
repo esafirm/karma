@@ -1,5 +1,7 @@
 package nolambda.github.usersearch
 
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import kotlinx.android.synthetic.main.screen_user_search.view.*
@@ -11,10 +13,15 @@ import stream.nolambda.karma.differ.ViewRenderer
 import stream.nolambda.karma.differ.renderer
 import stream.nolambda.karma.timetravel.TimeTravelEvent
 import stream.nolambda.karma.timetravel.TimeTravelEventManager
+import stream.nolambda.karma.timetravel.dashboard.TimeTravelDashboard
 import stream.nolambda.karma.ui.ActivityScreen
 import stream.nolambda.karma.ui.xml
 
 class UserSearchScreen : ActivityScreen() {
+
+    companion object {
+        private const val MENU_TIME_TRAVEL_DASHBOARD = 111
+    }
 
     override fun createView() = xml(R.layout.screen_user_search)
 
@@ -25,6 +32,18 @@ class UserSearchScreen : ActivityScreen() {
             presenterCreator = { UserSearchPresenter() },
             render = renderer::render
         )
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menu?.add(0, MENU_TIME_TRAVEL_DASHBOARD, 1, "Time Travel Dashboard")
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == MENU_TIME_TRAVEL_DASHBOARD) {
+            TimeTravelDashboard.start(this)
+        }
+        return super.onOptionsItemSelected(item)
     }
 }
 
