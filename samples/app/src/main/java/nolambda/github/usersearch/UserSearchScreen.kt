@@ -76,7 +76,7 @@ class UserSearchScreen : ActivityScreen() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == MENU_TIME_TRAVEL_DASHBOARD) {
-            TimeTravelDashboard.start(this)
+            TimeTravelDashboard.show(supportFragmentManager)
         }
         return super.onOptionsItemSelected(item)
     }

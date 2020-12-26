@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.library'
     id 'kotlin-android'
+    id 'kotlin-android-extensions'
 }
 
 android {
@@ -38,6 +39,10 @@ android {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'com.google.android.material:material:1.2.1'
+
+    final kommonVersion = '1.8.0'
+    implementation "com.github.esafirm.kommon:kommonadapter:$kommonVersion"
 
     implementation project(':karma-core')
     implementation project(':karma-renderer')

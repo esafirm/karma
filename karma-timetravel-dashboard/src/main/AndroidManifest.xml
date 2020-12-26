@@ -1,9 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="stream.nolambda.karma.timetravel.dashboard">
-
-    <application>
-        <activity android:name=".TimeTravelDashboard" />
-    </application>
+<manifest package="stream.nolambda.karma.timetravel.dashboard">
 
 </manifest>

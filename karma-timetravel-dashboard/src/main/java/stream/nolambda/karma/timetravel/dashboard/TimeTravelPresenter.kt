@@ -7,6 +7,14 @@ import stream.nolambda.karma.ui.UiPresenter
 class TimeTravelPresenter :
     UiPresenter<TimeTravelDashboardState>(Action { TimeTravelDashboardState() }) {
 
-    private val manager = TimeTravelEventManager.getAllTimeTravel()
+    init {
+        val timeTravel = TimeTravelEventManager.getAllTimeTravel().first()
+        setState {
+            copy(
+                timeline = timeTravel.getTimeline(),
+                currentState = timeTravel.getTimeline().first()
+            )
+        }
+    }
 
 }

@@ -1,19 +1,19 @@
 package stream.nolambda.karma.timetravel.dashboard
 
-import android.app.Activity
-import android.content.Context
-import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import nolambda.kommonadapter.attach
 import stream.nolambda.karma.Karma
 import stream.nolambda.karma.differ.renderer
 import stream.nolambda.karma.timetravel.dashboard.databinding.FragmentTimetravelDashboardBinding
 
-class TimeTravelDashboard : Fragment() {
+class TimeTravelDashboard : BottomSheetDialogFragment() {
+
+    private val adapter by lazy { DashboardAdapter(requireContext()) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,18 +34,17 @@ class TimeTravelDashboard : Fragment() {
     private fun createRenderer(binding: FragmentTimetravelDashboardBinding) =
         renderer<TimeTravelDashboardState, TimeTravelPresenter> {
             init {
-
+                binding.recycler.attach(adapter = adapter)
+            }
+            always {
+                adapter.pushData(it.timeline)
             }
         }
 
     companion object {
-        fun start(context: Context) {
-            val intent = Intent(context, TimeTravelDashboard::class.java).apply {
-                if (context !is Activity) {
-                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                }
-            }
-            context.startActivity(intent)
+        fun show(fragmentManager: FragmentManager) {
+            val dashboard = TimeTravelDashboard()
+            dashboard.show(fragmentManager, null)
         }
     }
 
