@@ -1,22 +1,22 @@
-package stream.nolambda.karma.ui
+package stream.nolambda.karma.ui.screens
 
 import android.content.Context
 import android.os.Bundle
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 
 abstract class ActivityScreen : AppCompatActivity(), ContextProvider {
 
-    abstract fun createView(): ScreenViewProvider
+    abstract val viewProvider: ScreenViewProvider<*>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val view = createView().invoke(layoutInflater, null)
+
+        val view = viewProvider.inflate(layoutInflater, null)
         setContentView(view)
-        onViewCreated(view)
+        onViewCreated()
     }
 
-    open fun onViewCreated(view: View) {}
+    open fun onViewCreated() {}
 
     override val ctx: Context
         get() = this

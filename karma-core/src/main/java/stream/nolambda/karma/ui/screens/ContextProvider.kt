@@ -1,4 +1,4 @@
-package stream.nolambda.karma.ui
+package stream.nolambda.karma.ui.screens
 
 import android.content.Context
 import android.graphics.drawable.Drawable
@@ -9,6 +9,7 @@ import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.annotation.LayoutRes
 import androidx.core.content.ContextCompat
+import androidx.viewbinding.ViewBinding
 
 interface ContextProvider {
     val ctx: Context
@@ -20,8 +21,10 @@ fun ContextProvider.resDrawable(@DrawableRes resId: Int): Drawable? =
 fun ContextProvider.resColor(@ColorRes resId: Int): Int =
     ContextCompat.getColor(ctx, resId)
 
-fun ContextProvider.xml(@LayoutRes resId: Int): ScreenViewProvider = { inflater, group ->
-    inflater.inflate(resId, group, false)
-}
+fun ContextProvider.xml(@LayoutRes resId: Int): ScreenViewProvider<View> =
+    XmlScreenViewProvider(resId)
 
-typealias ScreenViewProvider = (LayoutInflater, ViewGroup?) -> View
+fun <T : ViewBinding> ContextProvider.viewBinding(creator: ViewBindingInflater<T>) =
+    ViewBindingScreenViewProvider(creator)
+
+typealias ViewBindingInflater<T> = (LayoutInflater, ViewGroup?, Boolean) -> T

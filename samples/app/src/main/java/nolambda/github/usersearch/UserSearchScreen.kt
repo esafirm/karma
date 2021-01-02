@@ -2,7 +2,6 @@ package nolambda.github.usersearch
 
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.widget.Toast
 import nolambda.github.usersearch.databinding.ScreenUserSearchBinding
 import nolambda.github.usersearch.utils.onTextChange
@@ -13,8 +12,8 @@ import stream.nolambda.karma.differ.renderer
 import stream.nolambda.karma.timetravel.TimeTravelEvent
 import stream.nolambda.karma.timetravel.TimeTravelEventManager
 import stream.nolambda.karma.timetravel.dashboard.TimeTravelDashboard
-import stream.nolambda.karma.ui.ActivityScreen
-import stream.nolambda.karma.ui.xml
+import stream.nolambda.karma.ui.screens.ActivityScreen
+import stream.nolambda.karma.ui.screens.viewBinding
 
 class UserSearchScreen : ActivityScreen() {
 
@@ -24,12 +23,10 @@ class UserSearchScreen : ActivityScreen() {
 
     private val adapter by lazy { UserAdapter(this) }
 
-    override fun createView() = xml(R.layout.screen_user_search)
+    override val viewProvider = viewBinding(ScreenUserSearchBinding::inflate)
 
-    override fun onViewCreated(view: View) {
-        val binding = ScreenUserSearchBinding.bind(view)
-        val renderer = createRenderer(binding)
-
+    override fun onViewCreated() {
+        val renderer = createRenderer(viewProvider.getBinding())
         bind(
             presenterCreator = { UserSearchPresenter() },
             render = renderer::render
