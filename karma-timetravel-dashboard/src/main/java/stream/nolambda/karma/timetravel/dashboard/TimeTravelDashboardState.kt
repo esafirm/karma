@@ -1,6 +1,8 @@
 package stream.nolambda.karma.timetravel.dashboard
 
+import stream.nolambda.karma.timetravel.TimeTravelAction
+
 data class TimeTravelDashboardState(
-    val timeline: List<Any> = listOf(),
-    val currentState: Any? = null
+    val timeTravels: List<TimeTravelAction> = listOf(),
+    val currentTimeTravel: TimeTravelAction? = null
 )

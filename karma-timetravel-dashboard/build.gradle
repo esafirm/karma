@@ -43,6 +43,7 @@ dependencies {
 
     final kommonVersion = '2.0.0'
     implementation "com.github.esafirm.kommon:kommonadapter:$kommonVersion"
+    implementation "com.github.esafirm.kommon:kommonadapter-viewbinding:$kommonVersion"
 
     implementation project(':karma-core')
     implementation project(':karma-renderer')

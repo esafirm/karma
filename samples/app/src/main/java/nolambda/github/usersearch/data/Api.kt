@@ -11,9 +11,12 @@ object Api {
     private const val BASE_URL = "https://api.github.com/"
 
     private val httpLoggingInterceptor: HttpLoggingInterceptor by lazy {
-        val interceptor = HttpLoggingInterceptor(
-            HttpLoggingInterceptor.Logger { message: String? -> Log.d("Http", message) }
-        )
+        val interceptor = HttpLoggingInterceptor { message: String? ->
+            Log.d(
+                "Http",
+                message ?: ""
+            )
+        }
         interceptor.level = HttpLoggingInterceptor.Level.BODY
         interceptor
     }
