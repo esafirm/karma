@@ -4,6 +4,7 @@ import android.content.Context
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.item_user.view.*
 import nolambda.github.usersearch.data.User
+import nolambda.kommonadapter.map
 import nolambda.kommonadapter.simple.SimpleAdapter
 
 class UserAdapter(context: Context) : SimpleAdapter(context) {

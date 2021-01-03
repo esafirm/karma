@@ -1,70 +1,80 @@
 package nolambda.github.usersearch
 
-import android.view.View
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Toast
-import kotlinx.android.synthetic.main.screen_user_search.view.*
+import nolambda.github.usersearch.databinding.ScreenUserSearchBinding
 import nolambda.github.usersearch.utils.onTextChange
 import nolambda.github.usersearch.utils.setVisible
 import nolambda.kommonadapter.attach
-import stream.nolambda.karma.Karma
-import stream.nolambda.karma.differ.ViewRenderer
+import stream.nolambda.karma.bind
 import stream.nolambda.karma.differ.renderer
 import stream.nolambda.karma.timetravel.TimeTravelEvent
 import stream.nolambda.karma.timetravel.TimeTravelEventManager
-import stream.nolambda.karma.ui.ActivityScreen
-import stream.nolambda.karma.ui.xml
+import stream.nolambda.karma.timetravel.dashboard.TimeTravelDashboard
+import stream.nolambda.karma.ui.screens.ActivityScreen
+import stream.nolambda.karma.ui.screens.viewBinding
 
 class UserSearchScreen : ActivityScreen() {
 
-    override fun createView() = xml(R.layout.screen_user_search)
+    companion object {
+        private const val MENU_TIME_TRAVEL_DASHBOARD = 111
+    }
 
-    override fun onViewCreated(view: View) {
-        val renderer = UserSearchRenderer(view)
-        Karma.bind(
-            owner = this,
+    private val adapter by lazy { UserAdapter(this) }
+
+    override val viewProvider = viewBinding(ScreenUserSearchBinding::inflate)
+
+    override fun onViewCreated() {
+        val renderer = createRenderer(viewProvider.getBinding())
+        bind(
             presenterCreator = { UserSearchPresenter() },
             render = renderer::render
         )
     }
-}
 
-class UserSearchRenderer(view: View) : ViewRenderer<UserSearchState, UserSearchPresenter> {
+    private fun createRenderer(binding: ScreenUserSearchBinding) =
+        renderer<UserSearchState, UserSearchPresenter> {
+            init {
+                binding.recycler.attach(
+                    adapter = adapter,
+                    onBottomReached = { loadNextPage() }
+                )
 
-    private val adapter by lazy { UserAdapter(view.context) }
+                binding.btnBack.setOnClickListener {
+                    TimeTravelEventManager.dispatchEvent(TimeTravelEvent.Backward)
+                }
 
-    private val renderer = renderer<UserSearchState, UserSearchPresenter> {
-        init {
-            view.recycler.attach(
-                adapter = adapter,
-                onBottomReached = { loadNextPage() }
-            )
+                binding.btnForward.setOnClickListener {
+                    TimeTravelEventManager.dispatchEvent(TimeTravelEvent.Forward)
+                }
 
-            view.btnBack.setOnClickListener {
-                TimeTravelEventManager.dispatchEvent(TimeTravelEvent.Backward)
+                binding.inpSearch.onTextChange(debounceTime = 300) { query ->
+                    search(query)
+                }
             }
-
-            view.btnForward.setOnClickListener {
-                TimeTravelEventManager.dispatchEvent(TimeTravelEvent.Forward)
+            diff(UserSearchState::isLoading) {
+                binding.recycler.setVisible(it.not(), animate = true)
+                binding.progressBar.setVisible(it, animate = true)
             }
-
-            view.inpSearch.onTextChange(debounceTime = 300) { query ->
-                search(query)
+            event(UserSearchState::err) {
+                val appContext = binding.root.context.applicationContext
+                Toast.makeText(appContext, it.message, Toast.LENGTH_SHORT).show()
+            }
+            always {
+                adapter.pushData(it.users)
             }
         }
-        diff(UserSearchState::isLoading) {
-            view.recycler.setVisible(it.not(), animate = true)
-            view.progressBar.setVisible(it, animate = true)
-        }
-        event(UserSearchState::err) {
-            val appContext = view.context.applicationContext
-            Toast.makeText(appContext, it.message, Toast.LENGTH_SHORT).show()
-        }
-        always {
-            adapter.pushData(it.users)
-        }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menu?.add(0, MENU_TIME_TRAVEL_DASHBOARD, 1, "Time Travel Dashboard")
+        return super.onCreateOptionsMenu(menu)
     }
 
-    override fun render(state: UserSearchState, action: UserSearchPresenter) {
-        renderer.render(state, action)
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == MENU_TIME_TRAVEL_DASHBOARD) {
+            TimeTravelDashboard.show(supportFragmentManager)
+        }
+        return super.onOptionsItemSelected(item)
     }
 }

@@ -16,19 +16,27 @@ object Karma {
         isTestMode = true
     }
 
-    fun <S, O, P : KarmaPresenter<S>> bind(
-        owner: O,
+    /**
+     * Bind all required component to create Karma
+     * The [LifecycleOwner] and [ViewModelStoreOwner] is separated to accommodate [Fragment]
+     * leaky nature
+     *
+     * Use the extension function for [Activity]
+     */
+    fun <S, P : KarmaPresenter<S>> bind(
+        lifecycleOwner: LifecycleOwner,
+        viewModelStoreOwner: ViewModelStoreOwner,
         presenterCreator: () -> P,
         render: (S, P) -> Unit
-    ) where O : LifecycleOwner, O : ViewModelStoreOwner {
+    ) {
 
         val presenterHolder: PresenterHolder by lazy {
-            ViewModelProvider(owner).get(PresenterHolder::class.java)
+            ViewModelProvider(viewModelStoreOwner).get(PresenterHolder::class.java)
         }
 
         val currentPresenter = presenterHolder.bindPresenter(presenterCreator)
 
-        currentPresenter.attach(owner) {
+        currentPresenter.attach(lifecycleOwner) {
             render(it, currentPresenter)
         }
     }
@@ -39,4 +47,14 @@ object Karma {
         presenter = currentPresenter
         return currentPresenter as T
     }
+}
+
+/**
+ * extension function for [Karma.bind]
+ */
+fun <S, O, P : KarmaPresenter<S>> O.bind(
+    presenterCreator: () -> P,
+    render: (S, P) -> Unit
+) where O : LifecycleOwner, O : ViewModelStoreOwner {
+    Karma.bind(this, this, presenterCreator, render)
 }

@@ -1,4 +1,4 @@
-package stream.nolambda.karma
+package stream.nolambda.karma.timetravel.dashboard
 
 import org.junit.Test
 
