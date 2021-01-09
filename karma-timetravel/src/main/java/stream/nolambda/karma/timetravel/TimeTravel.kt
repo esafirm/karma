@@ -10,7 +10,7 @@ class TimeTravel<STATE>(
     override val name: String = "TimeTravel"
 ) : TimeTravelAction, KarmaAction<STATE> {
 
-    private val timeline = linkedSetOf<STATE>()
+    private val timeline = mutableListOf<STATE>()
     private var currentTime: STATE? = null
 
     /**
@@ -50,10 +50,10 @@ class TimeTravel<STATE>(
 
 
     /**
-     * Set the current state and update the index
+     * Select the current state and update the index
      * @param state the selected state
      */
-    override fun set(state: Any) {
+    override fun select(state: Any) {
         val selectedState = cast(state) ?: return
         val index = timeline.indexOf(selectedState)
 
@@ -61,6 +61,25 @@ class TimeTravel<STATE>(
             setState(timeline.elementAt(index))
         } else {
             KarmaLogger.log { "Timeline doesn't have $state" }
+        }
+    }
+
+    /**
+     * Replace the [oldState] with [newState] and select it
+     * @param oldState the old state that contained in [timeline]
+     * @param newState the new state that replacing the old state
+     */
+    override fun replace(oldState: Any, newState: Any) {
+        val selectedState = cast(oldState) ?: return
+        val castedNewState = cast(newState) ?: return
+        val index = timeline.indexOf(selectedState)
+
+        if (index >= 0) {
+            timeline.removeAt(index)
+            timeline.add(index, castedNewState)
+            setState(castedNewState)
+        } else {
+            KarmaLogger.log { "Timeline doesn't have $oldState" }
         }
     }
 

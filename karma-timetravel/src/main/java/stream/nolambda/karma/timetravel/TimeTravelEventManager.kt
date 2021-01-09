@@ -14,7 +14,9 @@ object TimeTravelEventManager : TimeTravelEventDispatcher {
             when (event) {
                 TimeTravelEvent.Forward -> listener.forward()
                 TimeTravelEvent.Backward -> listener.back()
-                is TimeTravelEvent.Set -> listener.set(event.selectedState)
+                is TimeTravelEvent.Select -> listener.select(event.selectedState)
+                is TimeTravelEvent.Replace -> listener.replace(event.oldState, event.newState)
+
             }
         }
     }
@@ -42,5 +44,6 @@ object TimeTravelEventManager : TimeTravelEventDispatcher {
 sealed class TimeTravelEvent {
     object Forward : TimeTravelEvent()
     object Backward : TimeTravelEvent()
-    data class Set(val selectedState: Any) : TimeTravelEvent()
+    data class Select(val selectedState: Any) : TimeTravelEvent()
+    data class Replace(val newState: Any, val oldState: Any) : TimeTravelEvent()
 }

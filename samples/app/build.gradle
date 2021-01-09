@@ -1,6 +1,9 @@
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'kotlin-android-extensions'
+    id 'org.jetbrains.kotlin.plugin.serialization' version '1.4.10'
+}
 
 android {
     compileSdkVersion 30
@@ -47,6 +50,9 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.3.2'
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
+
+    // Json
+    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1'
 
     implementation project(':karma-core')
     implementation project(':karma-timetravel')
