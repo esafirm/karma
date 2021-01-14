@@ -45,6 +45,8 @@ class TimeTravelDashboard : BottomSheetDialogFragment() {
             val result = data ?: error("No result in $requestCode")
             val newState = result.getStringExtra(StateEditorActivity.RESULT_EXTRA_NEW_STATE)
             presenter.selectEditState(newState!!)
+        } else {
+            presenter.clearEditState()
         }
     }
 

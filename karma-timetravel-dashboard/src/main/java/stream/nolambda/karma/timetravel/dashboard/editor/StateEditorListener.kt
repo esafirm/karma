@@ -18,6 +18,7 @@ fun stateEditorRenderer(
     listener: StateEditorListener
 ) = renderer<EditorState, UnitPresenter> {
     init {
+        binding.inpStateEditor.setupForEditing()
         binding.inpStateEditor.setText(it.stateString)
         binding.btnSave.setOnClickListener {
             listener.onSave(EditorState(binding.inpStateEditor.text.toString()))

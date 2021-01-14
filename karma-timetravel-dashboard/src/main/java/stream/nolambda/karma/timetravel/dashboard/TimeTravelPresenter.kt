@@ -34,6 +34,10 @@ class TimeTravelPresenter :
         )
     }
 
+    fun clearEditState() = setState {
+        copy(editStateInfo = null)
+    }
+
     fun selectEditState(newState: String) = setState {
         val clazz = editStateInfo?.clazz ?: error("No edit state info")
         val newStateObj = serializer.fromString(newState, clazz)
