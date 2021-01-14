@@ -25,9 +25,7 @@ import javax.xml.parsers.DocumentBuilderFactory
  * Custom EditText for syntax highlighting, auto-indent, etc.
  * Credits: https://github.com/vickychijwani/kotlin-koans-android/blob/master/app/src/main/code/me/vickychijwani/kotlinkoans/features/common/CodeEditText.kt
  */
-class CodeEditText @JvmOverloads constructor(
-    context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
-) : AppCompatEditText(context, attrs, defStyleAttr), CodeEditor {
+class CodeEditText : AppCompatEditText, CodeEditor {
     private var myTextSize = 13f.sp(context)
 
     // Syntax highlighter information
@@ -74,7 +72,16 @@ class CodeEditText @JvmOverloads constructor(
         val delimiterPairMap = mapOf('(' to ')', '{' to '}', '[' to ']')
     }
 
-    init {
+    constructor(context: Context) : super(context) {
+        init()
+    }
+
+    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
+        init(attrs)
+    }
+
+    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int)
+            : super(context, attrs, defStyleAttr) {
         init(attrs, defStyleAttr)
     }
 
