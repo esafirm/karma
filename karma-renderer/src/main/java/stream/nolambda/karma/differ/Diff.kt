@@ -4,21 +4,32 @@ package stream.nolambda.karma.differ
  * This is the diffing approach of https://github.com/arkivanov/MVIKotlin
  */
 
+interface StateGetter<S> {
+    fun getState(): S
+}
+
 interface ViewRenderer<S, A> {
     fun render(state: S, action: A)
 }
 
-inline fun <S : Any, A> renderer(
-    block: DiffBuilder<S, A>.() -> Unit
-): ViewRenderer<S, A> {
-    val builder = object : DiffBuilder<S, A>(), ViewRenderer<S, A> {
-        override fun render(state: S, action: A) {
-            binders.forEach { it.render(state, action) }
-        }
+class ParentRenderer<S : Any, A> : DiffBuilder<S, A>(), ViewRenderer<S, A>, StateGetter<S> {
+
+    private var internalState: S? = null
+
+    override fun render(state: S, action: A) {
+        internalState = state
+        binders.forEach { it.render(state, action) }
     }
 
-    builder.block()
+    override fun getState(): S = internalState!!
+}
 
+inline fun <S : Any, A> renderer(
+    block: DiffBuilder<S, A>.(getState: () -> S) -> Unit
+): ViewRenderer<S, A> {
+    val builder = ParentRenderer<S, A>()
+    val getState = { builder.getState() }
+    builder.block(getState)
     return builder
 }
 
@@ -27,7 +38,7 @@ open class DiffBuilder<S : Any, A> {
     @PublishedApi
     internal val binders = mutableListOf<ViewRenderer<S, A>>()
 
-    inline fun init(crossinline render: A.(S) -> Unit) {
+    fun init(render: A.(S) -> Unit) {
         binders += object : ViewRenderer<S, A> {
 
             var isAlreadyRender = false
@@ -48,10 +59,10 @@ open class DiffBuilder<S : Any, A> {
      * @param compare a `comparator` to compare a new value with the old one, default is `equals`
      * @param set a `consumer` of the values, receives the new value if it is the first value or if the `comparator` returned `false`
      */
-    inline fun <T> diff(
-        crossinline get: (S) -> T,
-        crossinline compare: (new: T, old: T) -> Boolean = { a, b -> a == b },
-        crossinline set: A.(T) -> Unit
+    fun <T> diff(
+        get: (S) -> T,
+        compare: (new: T, old: T) -> Boolean = { a, b -> a == b },
+        set: A.(T) -> Unit
     ) {
         binders += object : ViewRenderer<S, A> {
             private var oldValue: T? = null
@@ -68,7 +79,7 @@ open class DiffBuilder<S : Any, A> {
         }
     }
 
-    inline fun always(crossinline render: A.(S) -> Unit) {
+    fun always(render: A.(S) -> Unit) {
         binders += object : ViewRenderer<S, A> {
             override fun render(state: S, action: A) {
                 render.invoke(action, state)
@@ -76,9 +87,9 @@ open class DiffBuilder<S : Any, A> {
         }
     }
 
-    inline fun <T> event(
-        crossinline get: (S) -> SingleEvent<T>?,
-        crossinline set: A.(T) -> Unit
+    fun <T> event(
+        get: (S) -> SingleEvent<T>?,
+        set: A.(T) -> Unit
     ) {
         binders += object : ViewRenderer<S, A> {
             override fun render(state: S, action: A) {

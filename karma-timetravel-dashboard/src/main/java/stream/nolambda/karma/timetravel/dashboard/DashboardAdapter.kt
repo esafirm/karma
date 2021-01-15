@@ -8,8 +8,8 @@ import stream.nolambda.karma.timetravel.dashboard.databinding.ItemScreenStateBin
 class DashboardAdapter(context: Context) : SimpleAdapter(context) {
     init {
         create {
-            map(ItemScreenStateBinding::inflate, Any::class) { vh, any ->
-                text.text = any.toString()
+            map(ItemScreenStateBinding::inflate, Any::class) { _, state ->
+                txtState.text = state.toString()
             }
         }
     }

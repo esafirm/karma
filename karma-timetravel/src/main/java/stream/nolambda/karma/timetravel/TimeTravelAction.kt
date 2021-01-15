@@ -3,7 +3,8 @@ package stream.nolambda.karma.timetravel
 interface TimeTravelAction {
     fun forward()
     fun back()
-    fun set(state: Any)
+    fun select(state: Any)
+    fun replace(oldState: Any, newState: Any)
 
     fun getTimeline(): List<Any>
 

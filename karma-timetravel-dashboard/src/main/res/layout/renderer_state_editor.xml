@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:id="@+id/code_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/btn_save"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:padding="@dimen/space16">
+
+        <EditText
+            android:textSize="13sp"
+            android:id="@+id/inp_state_editor"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:fontFamily="monospace"
+            android:gravity="start"
+            android:inputType="text|textNoSuggestions|textMultiLine"
+            android:padding="0dp"
+            android:textColorHighlight="@color/code_edit_highlight_color"
+            android:textCursorDrawable="@drawable/code_edit_cursor"
+            android:typeface="monospace"
+            tools:text="This is some code" />
+
+    </FrameLayout>
+
+    <Button
+        android:id="@+id/btn_save"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/btn_save"
+        android:text="@string/save_state"
+        android:textColor="#FFF" />
+
+</RelativeLayout>

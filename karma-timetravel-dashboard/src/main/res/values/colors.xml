@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- code editor / viewer -->
+    <color name="code_edit_highlight_color">#97D8FA</color>
+</resources>
