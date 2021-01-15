@@ -1,5 +1,7 @@
 package stream.nolambda.karma.timetravel.dashboard.editor
 
+import de.markusressel.kodehighlighter.core.util.EditTextHighlighter
+import de.markusressel.kodehighlighter.language.json.JsonRuleBook
 import stream.nolambda.karma.Action
 import stream.nolambda.karma.differ.renderer
 import stream.nolambda.karma.timetravel.dashboard.databinding.RendererStateEditorBinding
@@ -18,6 +20,13 @@ fun stateEditorRenderer(
     listener: StateEditorListener
 ) = renderer<EditorState, UnitPresenter> {
     init {
+
+        val editTextHighlighter = EditTextHighlighter(
+            target = binding.inpStateEditor,
+            languageRuleBook = JsonRuleBook()
+        )
+        editTextHighlighter.start()
+
         binding.inpStateEditor.setText(it.stateString)
         binding.btnSave.setOnClickListener {
             listener.onSave(EditorState(binding.inpStateEditor.text.toString()))
@@ -25,6 +34,4 @@ fun stateEditorRenderer(
     }
 }
 
-class UnitPresenter(state: String) : UiPresenter<EditorState>(Action { EditorState(state) }) {
-
-}
+class UnitPresenter(state: String) : UiPresenter<EditorState>(Action { EditorState(state) })

@@ -11,7 +11,9 @@ import stream.nolambda.karma.bind
 import stream.nolambda.karma.differ.renderer
 import stream.nolambda.karma.timetravel.TimeTravelEvent
 import stream.nolambda.karma.timetravel.TimeTravelEventManager
+import stream.nolambda.karma.timetravel.dashboard.EditStateInfo
 import stream.nolambda.karma.timetravel.dashboard.TimeTravelDashboard
+import stream.nolambda.karma.timetravel.dashboard.editor.StateEditorActivity
 import stream.nolambda.karma.ui.screens.ActivityScreen
 import stream.nolambda.karma.ui.screens.viewBinding
 
