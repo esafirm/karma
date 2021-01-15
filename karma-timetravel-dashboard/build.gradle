@@ -48,6 +48,11 @@ dependencies {
     // Reflection
     implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
 
+    // Code Editor
+    final highlighterVersion = "v2.0.0"
+    implementation "com.github.markusressel.KodeHighlighter:core:$highlighterVersion"
+    implementation "com.github.markusressel.KodeHighlighter:json:$highlighterVersion"
+
     final kommonVersion = '2.0.0'
     implementation "com.github.esafirm.kommon:kommonadapter:$kommonVersion"
     implementation "com.github.esafirm.kommon:kommonadapter-viewbinding:$kommonVersion"

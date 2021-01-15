@@ -1,5 +1,6 @@
 package stream.nolambda.karma.timetravel.dashboard.editor
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -46,6 +47,13 @@ class StateEditorActivity : AppCompatActivity() {
                 putExtra(EXTRA_STATE_INFO, stateInfo)
             }
             fragment.startActivityForResult(intent, RQ_CODE)
+        }
+
+        fun start(context: Activity, stateInfo: EditStateInfo) {
+            val intent = Intent(context, StateEditorActivity::class.java).apply {
+                putExtra(EXTRA_STATE_INFO, stateInfo)
+            }
+            context.startActivity(intent)
         }
     }
 }
