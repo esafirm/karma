@@ -58,7 +58,7 @@ class TimeTravel<STATE>(
         val index = timeline.indexOf(selectedState)
 
         if (index >= 0) {
-            setState(timeline.elementAt(index))
+            setStateAndUpdate(selectedState)
         } else {
             KarmaLogger.log { "Timeline doesn't have $state" }
         }
@@ -77,7 +77,7 @@ class TimeTravel<STATE>(
         if (index >= 0) {
             timeline.removeAt(index)
             timeline.add(index, castedNewState)
-            setState(castedNewState)
+            setStateAndUpdate(castedNewState)
         } else {
             KarmaLogger.log { "Timeline doesn't have $oldState" }
         }
@@ -92,6 +92,15 @@ class TimeTravel<STATE>(
         }
     }
 
+    /**
+     * Set [currentState] as current time and setState
+     * Used for selecting or replacing state in [timeline]
+     */
+    private fun setStateAndUpdate(currentState: STATE) {
+        currentTime = currentState
+        setState(currentState)
+    }
+
     private fun setState(currentState: STATE) {
         KarmaLogger.log { "CurrentState $currentState" }
 
@@ -102,7 +111,7 @@ class TimeTravel<STATE>(
 
     override fun attach(owner: LifecycleOwner, onStateChange: (STATE) -> Unit) {
         action.attach(owner) {
-            if (timeline.isEmpty() || currentTime == timeline.last()) {
+            if (timeline.isEmpty() || !timeline.contains(it)) {
                 timeline.add(it)
             }
             currentTime = it
