@@ -14,16 +14,17 @@ import stream.nolambda.karma.timetravel.TimeTravelEventListener
 import stream.nolambda.karma.ui.UiPresenter
 
 class UserSearchPresenter(
-    private val action: KarmaAction<UserSearchState> = TimeTravel(
-        action = Action { UserSearchState() },
-        name = "UserSearchPresenter"
-    ),
     private val api: ApiInterface = Api()
-) : UiPresenter<UserSearchState>(action), TimeTravelEventListener {
+) : UiPresenter<UserSearchState>(), TimeTravelEventListener {
 
     companion object {
         const val FIRST_PAGE = 1
     }
+
+    override val action: KarmaAction<UserSearchState> = TimeTravel(
+        action = Action { UserSearchState() },
+        name = "UserSearchPresenter"
+    )
 
     override fun onAttach(owner: LifecycleOwner) {
         bindTimeTravel(owner, action as TimeTravelAction)

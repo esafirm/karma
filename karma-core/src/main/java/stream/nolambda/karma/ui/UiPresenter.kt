@@ -1,14 +1,21 @@
 package stream.nolambda.karma.ui
 
 import androidx.lifecycle.LifecycleOwner
-import stream.nolambda.karma.KarmaAction
-import stream.nolambda.karma.KarmaContextBuilder
-import stream.nolambda.karma.KarmaPresenter
-import stream.nolambda.karma.StateChangeBuilder
+import stream.nolambda.karma.*
 
-abstract class UiPresenter<STATE>(
-    private val action: KarmaAction<STATE>
-) : KarmaPresenter<STATE> {
+abstract class UiPresenter<STATE> : KarmaPresenter<STATE> {
+
+    private fun defaultInitialState(): Nothing = TODO(
+        """
+        Please initialize the default state via:
+        1. Override initialState() in Presenter
+        2. Override action property in Presenter
+        """.trimIndent()
+    )
+
+    protected open val action: KarmaAction<STATE> = Action(::initialState)
+
+    open fun initialState(): STATE = defaultInitialState()
 
     open fun onAttach(owner: LifecycleOwner) {
         // no-op

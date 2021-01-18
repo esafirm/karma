@@ -1,13 +1,12 @@
 package stream.nolambda.karma.timetravel.dashboard
 
-import stream.nolambda.karma.Action
 import stream.nolambda.karma.differ.asSingleEvent
 import stream.nolambda.karma.timetravel.TimeTravelAction
 import stream.nolambda.karma.timetravel.TimeTravelEventManager
 import stream.nolambda.karma.ui.UiPresenter
 
 class TimeTravelPresenter :
-    UiPresenter<TimeTravelDashboardState>(Action { TimeTravelDashboardState() }) {
+    UiPresenter<TimeTravelDashboardState>() {
 
     private val serializer = TimeTravelDashboardConfig.serializer
 
@@ -20,6 +19,8 @@ class TimeTravelPresenter :
             )
         }
     }
+
+    override fun initialState() = TimeTravelDashboardState()
 
     fun setCurrentTimeTravel(timeTravel: TimeTravelAction) = setState {
         copy(currentTimeTravel = timeTravel)

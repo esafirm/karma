@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import stream.nolambda.karma.bind
 import stream.nolambda.karma.timetravel.dashboard.EditStateInfo
 import stream.nolambda.karma.timetravel.dashboard.databinding.RendererStateEditorBinding
+import stream.nolambda.karma.ui.StaticPresenter
 
 class StateEditorActivity : AppCompatActivity() {
 
@@ -30,7 +31,7 @@ class StateEditorActivity : AppCompatActivity() {
             }
         })
         bind(
-            presenterCreator = { UnitPresenter(passedState.state) },
+            presenterCreator = { StaticPresenter(EditorState(passedState.state)) },
             render = renderer::render
         )
     }
