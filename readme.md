@@ -5,6 +5,28 @@ It supports React's-ish time travel debugging and diff render.
 
 ## Gradle
 
+In your root `build.gradle` 
+
+```groovy
+allprojects {
+	repositories {
+		...
+		maven { url 'https://jitpack.io' }
+	}
+}
+```
+
+In your module `build.gradle`
+
+```groovy
+dependencies {
+	implementation 'com.github.esafirm.karma:karma-core:1.0.0'
+	implementation 'com.github.esafirm.karma:karma-renderer:1.0.0'
+	implementation 'com.github.esafirm.karma:karma-timetravel:1.0.0'
+	implementation 'com.github.esafirm.karma:karma-timetravel-dashboard:1.0.0'
+}
+```
+
 ## Modules
 
 The library currently separated into four modules:
@@ -22,7 +44,7 @@ If we create a dependency tree, it would look like this:
      /        \
 renderer     time travel
                 \
-				time travel dashboard
+            time travel dashboard
 ```
 
  - `core` module is standalone
