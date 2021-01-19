@@ -9,10 +9,10 @@ In your root `build.gradle`
 
 ```groovy
 allprojects {
-	repositories {
-		...
-		maven { url 'https://jitpack.io' }
-	}
+  repositories {
+    ...
+    maven { url 'https://jitpack.io' }
+  }
 }
 ```
 
@@ -20,10 +20,10 @@ In your module `build.gradle`
 
 ```groovy
 dependencies {
-	implementation 'com.github.esafirm.karma:karma-core:1.0.0'
-	implementation 'com.github.esafirm.karma:karma-renderer:1.0.0'
-	implementation 'com.github.esafirm.karma:karma-timetravel:1.0.0'
-	implementation 'com.github.esafirm.karma:karma-timetravel-dashboard:1.0.0'
+  implementation 'com.github.esafirm.karma:karma-core:1.0.0'
+  implementation 'com.github.esafirm.karma:karma-renderer:1.0.0'
+  implementation 'com.github.esafirm.karma:karma-timetravel:1.0.0'
+  implementation 'com.github.esafirm.karma:karma-timetravel-dashboard:1.0.0'
 }
 ```
 
@@ -115,8 +115,8 @@ Or, we could use the extension function to make it more simple
 
 ```kotlin
 bind(
-	presenterCreator = { SimplePresenter() },
-    render = renderer::render
+  presenterCreator = { SimplePresenter() },
+  render = renderer::render
 )
 ```
 
