@@ -1,14 +1,13 @@
 package stream.nolambda.karma.timetravel
 
-import androidx.lifecycle.LifecycleOwner
 import stream.nolambda.karma.KarmaAction
-import stream.nolambda.karma.KarmaContextBuilder
+import stream.nolambda.karma.WrapperAction
 import stream.nolambda.karma.utils.KarmaLogger
 
 class TimeTravel<STATE>(
-    private val action: KarmaAction<STATE>,
+    action: KarmaAction<STATE>,
     override val name: String = "TimeTravel"
-) : TimeTravelAction, KarmaAction<STATE> {
+) : WrapperAction<STATE>(action), TimeTravelAction {
 
     private val timeline = mutableListOf<STATE>()
     private var currentTime: STATE? = null
@@ -24,7 +23,7 @@ class TimeTravel<STATE>(
         }
 
         val index = timeline.indexOf(currentTime)
-        setState(timeline.elementAt(index + 1))
+        setStateAndLog(timeline.elementAt(index + 1))
     }
 
     /**
@@ -38,7 +37,7 @@ class TimeTravel<STATE>(
         }
 
         val index = timeline.indexOf(currentTime)
-        setState(timeline.elementAt(index - 1))
+        setStateAndLog(timeline.elementAt(index - 1))
     }
 
     /**
@@ -98,31 +97,18 @@ class TimeTravel<STATE>(
      */
     private fun setStateAndUpdate(currentState: STATE) {
         currentTime = currentState
+        setStateAndLog(currentState)
+    }
+
+    private fun setStateAndLog(currentState: STATE) {
+        KarmaLogger.log { "CurrentState $currentState" }
         setState(currentState)
     }
 
-    private fun setState(currentState: STATE) {
-        KarmaLogger.log { "CurrentState $currentState" }
-
-        action.execute {
-            set { currentState }
+    override fun onStateUpdate(state: STATE) {
+        if (timeline.isEmpty() || !timeline.contains(state)) {
+            timeline.add(state)
         }
-    }
-
-    override fun attach(owner: LifecycleOwner, onStateChange: (STATE) -> Unit) {
-        action.attach(owner) {
-            if (timeline.isEmpty() || !timeline.contains(it)) {
-                timeline.add(it)
-            }
-            currentTime = it
-            onStateChange.invoke(it)
-        }
-    }
-
-    override val currentState: STATE
-        get() = action.currentState
-
-    override fun execute(block: KarmaContextBuilder<STATE>.() -> Unit) {
-        action.execute(block)
+        currentTime = state
     }
 }

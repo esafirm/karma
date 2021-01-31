@@ -20,7 +20,11 @@ class KarmaContextBuilder<T>(private val currentState: T) {
         this.stateChange = { change.invoke(currentState) }
     }
 
-    fun build(): KarmaContext<T> =
+    /**
+     * Create [KarmaContext] from the builder
+     * This should only called by the internal
+     */
+    internal fun build(): KarmaContext<T> =
         KarmaContext(name, stateChange ?: { currentState })
 }
 
