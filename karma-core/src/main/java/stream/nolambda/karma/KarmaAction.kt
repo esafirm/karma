@@ -2,30 +2,14 @@ package stream.nolambda.karma
 
 import androidx.lifecycle.LifecycleOwner
 
-typealias StateChange<T> = () -> T
-typealias StateChangeBuilder<T> = T.() -> T
-typealias NameResolver = () -> String
+typealias StateChange<T> = T.() -> T
 
-data class KarmaContext<T>(
-    val actionName: NameResolver,
-    val stateChange: StateChange<T>
-)
-
-class KarmaContextBuilder<T>(private val currentState: T) {
-
-    var name: NameResolver = { "" }
-    private var stateChange: StateChange<T>? = null
-
-    fun set(change: StateChangeBuilder<T>) {
-        this.stateChange = { change.invoke(currentState) }
+class KarmaContext<T>(
+    private val executeFn: (name: String?, StateChange<T>) -> Unit
+) {
+    fun setState(stateChange: StateChange<T>) {
+        executeFn(null, stateChange)
     }
-
-    /**
-     * Create [KarmaContext] from the builder
-     * This should only called by the internal
-     */
-    internal fun build(): KarmaContext<T> =
-        KarmaContext(name, stateChange ?: { currentState })
 }
 
 interface KarmaPresenter<STATE> {
@@ -34,5 +18,5 @@ interface KarmaPresenter<STATE> {
 
 interface KarmaAction<STATE> : KarmaPresenter<STATE> {
     val currentState: STATE
-    fun execute(block: KarmaContextBuilder<STATE>.() -> Unit)
+    fun execute(block: suspend KarmaContext<STATE>.() -> Unit)
 }

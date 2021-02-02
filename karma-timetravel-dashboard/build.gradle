@@ -42,11 +42,11 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.google.android.material:material:1.2.1'
 
+    // Coroutine
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.2'
+
     // Json
     implementation 'com.google.code.gson:gson:2.8.6'
-
-    // Reflection
-    implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
 
     // Code Editor
     final highlighterVersion = "v2.0.0"

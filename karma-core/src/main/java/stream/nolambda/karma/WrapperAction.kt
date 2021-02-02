@@ -16,7 +16,7 @@ abstract class WrapperAction<STATE>(
         }
     }
 
-    override fun execute(block: KarmaContextBuilder<STATE>.() -> Unit) {
+    override fun execute(block: suspend KarmaContext<STATE>.() -> Unit) {
         originalAction.execute(block)
     }
 
@@ -25,7 +25,7 @@ abstract class WrapperAction<STATE>(
      */
     protected fun setState(state: STATE) {
         originalAction.execute {
-            set { state }
+            setState { state }
         }
     }
 

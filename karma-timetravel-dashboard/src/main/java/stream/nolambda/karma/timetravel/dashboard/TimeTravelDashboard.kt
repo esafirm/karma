@@ -33,7 +33,7 @@ class TimeTravelDashboard : BottomSheetDialogFragment() {
         Karma.bind(
             lifecycleOwner = viewLifecycleOwner,
             viewModelStoreOwner = this,
-            presenterCreator = this::presenter,
+            presenter = this::presenter,
             render = renderer::render
         )
         return binding.root

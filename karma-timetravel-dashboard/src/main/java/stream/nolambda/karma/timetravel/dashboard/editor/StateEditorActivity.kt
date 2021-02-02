@@ -31,7 +31,7 @@ class StateEditorActivity : AppCompatActivity() {
             }
         })
         bind(
-            presenterCreator = { StaticPresenter(EditorState(passedState.state)) },
+            presenter = { StaticPresenter(EditorState(passedState.state)) },
             render = renderer::render
         )
     }

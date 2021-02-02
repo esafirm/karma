@@ -30,7 +30,7 @@ class UserSearchScreen : ActivityScreen() {
     override fun onViewCreated() {
         val renderer = createRenderer(viewProvider.getBinding())
         bind(
-            presenterCreator = { UserSearchPresenter() },
+            presenter = { UserSearchPresenter() },
             render = renderer::render
         )
     }

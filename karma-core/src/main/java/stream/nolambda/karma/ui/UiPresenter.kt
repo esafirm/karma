@@ -31,11 +31,13 @@ abstract class UiPresenter<STATE> : KarmaPresenter<STATE> {
     /* > Helper / Sugar */
     /* --------------------------------------------------- */
 
-    protected fun execute(block: KarmaContextBuilder<STATE>.() -> Unit) {
+    protected fun execute(block: suspend KarmaContext<STATE>.() -> Unit) {
         action.execute(block)
     }
 
-    protected fun setState(change: StateChangeBuilder<STATE>) = execute {
-        set(change)
+    protected fun setState(change: StateChange<STATE>) {
+        action.execute {
+            setState(change)
+        }
     }
 }
