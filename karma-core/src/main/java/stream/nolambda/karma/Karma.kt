@@ -4,12 +4,14 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import stream.nolambda.karma.config.ActionExecutor
+import stream.nolambda.karma.config.ActionExecutorFactory
 import stream.nolambda.karma.config.DefaultActionExecutor
+import stream.nolambda.karma.config.DefaultActionExecutorFactory
 import stream.nolambda.karma.ui.PresenterHolder
 
 object Karma {
     var isTestMode: Boolean = false
-    var executor: ActionExecutor = DefaultActionExecutor()
+    var executor: ActionExecutorFactory = DefaultActionExecutorFactory()
     var enableLog = false
 
     fun setTestMode() {
@@ -53,8 +55,8 @@ object Karma {
  * extension function for [Karma.bind]
  */
 fun <S, O, P : KarmaPresenter<S>> O.bind(
-    presenterCreator: () -> P,
+    presenter: () -> P,
     render: (S, P) -> Unit
 ) where O : LifecycleOwner, O : ViewModelStoreOwner {
-    Karma.bind(this, this, presenterCreator, render)
+    Karma.bind(this, this, presenter, render)
 }

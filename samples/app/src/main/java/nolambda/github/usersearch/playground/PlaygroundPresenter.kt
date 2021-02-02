@@ -2,21 +2,23 @@ package nolambda.github.usersearch.playground
 
 import kotlinx.coroutines.delay
 import stream.nolambda.karma.ui.UiPresenter
-import kotlin.random.Random
 
 class PlaygroundPresenter : UiPresenter<String>() {
     override fun initialState(): String = ""
 
-    fun actionOne() = runSuspend {
+    fun actionOne() = execute {
         setState { "Start of Action #1" }
         Logger.log("before sleep")
         delay(1000)
-        val a = Random.nextInt()
-        setState { "End of Action #1: $a" }
+        setState { "End of Action #1 | Before $this" }
     }
 
-    fun actionTwo() = runSuspend {
+    fun actionTwo() = execute {
         delay(500)
         setState { "Action #2" }
+    }
+
+    fun actionThree() = setState {
+        "Action #3 | Before $this"
     }
 }

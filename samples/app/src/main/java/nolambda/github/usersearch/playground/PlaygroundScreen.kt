@@ -17,7 +17,7 @@ class PlaygroundScreen : ActivityScreen() {
 
         val presenter = PlaygroundPresenter()
         bind(
-            presenterCreator = { presenter },
+            presenter = { presenter },
             render = { state, _ ->
                 Logger.log(state)
             }
@@ -25,6 +25,7 @@ class PlaygroundScreen : ActivityScreen() {
 
         presenter.actionOne()
         presenter.actionTwo()
+        presenter.actionThree()
     }
 
     companion object {
