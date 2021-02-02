@@ -4,6 +4,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import nolambda.github.usersearch.databinding.ScreenUserSearchBinding
+import nolambda.github.usersearch.playground.PlaygroundScreen
 import nolambda.github.usersearch.utils.onTextChange
 import nolambda.github.usersearch.utils.setVisible
 import nolambda.kommonadapter.attach
@@ -11,9 +12,7 @@ import stream.nolambda.karma.bind
 import stream.nolambda.karma.differ.renderer
 import stream.nolambda.karma.timetravel.TimeTravelEvent
 import stream.nolambda.karma.timetravel.TimeTravelEventManager
-import stream.nolambda.karma.timetravel.dashboard.EditStateInfo
 import stream.nolambda.karma.timetravel.dashboard.TimeTravelDashboard
-import stream.nolambda.karma.timetravel.dashboard.editor.StateEditorActivity
 import stream.nolambda.karma.ui.screens.ActivityScreen
 import stream.nolambda.karma.ui.screens.viewBinding
 
@@ -21,6 +20,7 @@ class UserSearchScreen : ActivityScreen() {
 
     companion object {
         private const val MENU_TIME_TRAVEL_DASHBOARD = 111
+        private const val MENU_PLAYGROUND = 222
     }
 
     private val adapter by lazy { UserAdapter(this) }
@@ -70,12 +70,14 @@ class UserSearchScreen : ActivityScreen() {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menu?.add(0, MENU_TIME_TRAVEL_DASHBOARD, 1, "Time Travel Dashboard")
+        menu?.add(1, MENU_PLAYGROUND, 1, "Playground")
         return super.onCreateOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == MENU_TIME_TRAVEL_DASHBOARD) {
-            TimeTravelDashboard.show(supportFragmentManager)
+        when (item.itemId) {
+            MENU_TIME_TRAVEL_DASHBOARD -> TimeTravelDashboard.show(supportFragmentManager)
+            MENU_PLAYGROUND -> PlaygroundScreen.start(this)
         }
         return super.onOptionsItemSelected(item)
     }
