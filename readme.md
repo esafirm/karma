@@ -5,7 +5,7 @@ It supports React's-ish time travel debugging and diff render.
 
 ## Gradle
 
-In your root `build.gradle` 
+In your root `build.gradle`
 
 ```groovy
 allprojects {
@@ -36,7 +36,7 @@ The library currently separated into four modules:
 3. Time Travel
 4. Time Travel Dashboard
 
-If we create a dependency tree, it would look like this: 
+If we create a dependency tree, it would look like this:
 
 ```
         core
@@ -47,10 +47,10 @@ renderer     time travel
             time travel dashboard
 ```
 
- - `core` module is standalone
- - `renderer` needs core
- - `time travel` needs core
- - `time travel dasboard` needs core & time travel 
+- `core` module is standalone
+- `renderer` needs core
+- `time travel` needs core
+- `time travel dasboard` needs core & time travel
 
 ## Usage
 
@@ -68,8 +68,8 @@ State refer to a **view state**. For example we have this simple state
 
 ```kotlin
 data class SimpleScreenState(
-	val textLineOne: String,
-	val textLineTwo: String
+  val textLineOne: String,
+  val textLineTwo: String
 )
 ```
 
@@ -78,12 +78,12 @@ Presenter is a place that we call all our action that change a state.
 ```kotlin
 class SimplePresenter : UiPresenter<SimpleScreenState>(action) {
 
-	override fun initialState() = SimpleScreenState("a", "b")
+  override fun initialState() = SimpleScreenState("a", "b")
 
-	// We change textLineOne and retain our current textLineTwo
-	fun changeLineOne(text: String) = setState {
-		copy(textLineOne = text)
-	}
+  // We change textLineOne and retain our current textLineTwo
+  fun changeLineOne(text: String) = setState {
+    copy(textLineOne = text)
+  }
 }
 ```
 
@@ -91,23 +91,23 @@ To initialize Karma, you need to now os how to bind all the component together
 
 ```kotlin
 fun <S, P : KarmaPresenter<S>> bind(
-        lifecycleOwner: LifecycleOwner,
-        viewModelStoreOwner: ViewModelStoreOwner,
-        presenterCreator: () -> P,
-        render: (S, P) -> Unit
-	)
+  lifecycleOwner: LifecycleOwner,
+  viewModelStoreOwner: ViewModelStoreOwner,
+  presenterCreator: () -> P,
+  render: (S, P) -> Unit
+)
 ```
 
 And this is an example of `Karma.bind` called in `AppCompatActivity`
 
 ```kotlin
 Karma.bind(
-	lifecycleOwner = this,
-	viewModelStoreOwner = this,
-	presenterCreator = { SimplePresenter() },
-	render = { state, presenter -> 
-	  // do render
-	}
+  lifecycleOwner = this,
+  viewModelStoreOwner = this,
+  presenter = { SimplePresenter() },
+  render = { state, presenter ->
+    // do render
+  }
 )
 ```
 
@@ -115,7 +115,7 @@ Or, we could use the extension function to make it more simple
 
 ```kotlin
 bind(
-  presenterCreator = { SimplePresenter() },
+  presenter = { SimplePresenter() },
   render = renderer::render
 )
 ```
@@ -126,20 +126,23 @@ Renderer enable us to control on how we can render state
 
 ```kotlin
 renderer<State, Presenter> {
-	init {
-		// This will only called once.
-		// Could be used to intialize some views or setup the listener
-	}
-	diff(State::data) {
-		// This will only be called when state.data is changed
-	}
-	event(State::event) {
-		// This will use special state called SingleEvent<E> that have internal flag
-		// when the value is fetched
-	}
-	always {
-		// This will be always called
-	}
+  init {
+    // This will only called once.
+    // Could be used to intialize some views or setup the listener
+  }
+
+  diff(State::data) {
+    // This will only be called when state.data is changed
+  }
+	
+  event(State::event) {
+    // This will use special state called SingleEvent<E> that have internal flag
+	// This can be used for notification state (ex: show toast)
+  }
+
+  always {
+    // This will be always called
+  }
 }
 ```
 
