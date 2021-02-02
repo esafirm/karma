@@ -48,9 +48,6 @@ dependencies {
     // Json
     implementation 'com.google.code.gson:gson:2.8.6'
 
-    // Reflection
-    implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
-
     // Code Editor
     final highlighterVersion = "v2.0.0"
     implementation "com.github.markusressel.KodeHighlighter:core:$highlighterVersion"

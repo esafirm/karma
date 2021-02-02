@@ -3,9 +3,7 @@ package stream.nolambda.karma
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
-import stream.nolambda.karma.config.ActionExecutor
 import stream.nolambda.karma.config.ActionExecutorFactory
-import stream.nolambda.karma.config.DefaultActionExecutor
 import stream.nolambda.karma.config.DefaultActionExecutorFactory
 import stream.nolambda.karma.ui.PresenterHolder
 
@@ -28,7 +26,7 @@ object Karma {
     fun <S, P : KarmaPresenter<S>> bind(
         lifecycleOwner: LifecycleOwner,
         viewModelStoreOwner: ViewModelStoreOwner,
-        presenterCreator: () -> P,
+        presenter: () -> P,
         render: (S, P) -> Unit
     ) {
 
@@ -36,7 +34,7 @@ object Karma {
             ViewModelProvider(viewModelStoreOwner).get(PresenterHolder::class.java)
         }
 
-        val currentPresenter = presenterHolder.bindPresenter(presenterCreator)
+        val currentPresenter = presenterHolder.bindPresenter(presenter)
 
         currentPresenter.attach(lifecycleOwner) {
             render(it, currentPresenter)
