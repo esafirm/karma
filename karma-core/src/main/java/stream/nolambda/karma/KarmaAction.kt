@@ -17,7 +17,10 @@ class KarmaContextBuilder<T>(private val currentState: T) {
     private var stateChange: StateChange<T>? = null
 
     fun set(change: StateChangeBuilder<T>) {
-        this.stateChange = { change.invoke(currentState) }
+        if (stateChange != null) {
+            error("Only one set() will be called in this context. Please change your code")
+        }
+        stateChange = { change.invoke(currentState) }
     }
 
     /**

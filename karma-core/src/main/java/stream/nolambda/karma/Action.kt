@@ -36,8 +36,8 @@ class Action<STATE>(private val initialState: () -> STATE) : KarmaAction<STATE> 
 
     override fun execute(block: KarmaContextBuilder<STATE>.() -> Unit) {
         executor.execute {
-            val context = createNextContext(block)
-            val (isTheSame, state) = createNewState(context.stateChange)
+            val context = createNextContext(block) // Execute context block
+            val (isTheSame, state) = createNewState(context.stateChange) // Execute state change
 
             if (Karma.isTestMode.not() && isTheSame.not()) {
                 stateLiveData.postValue(state)
