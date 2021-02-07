@@ -13,7 +13,7 @@ class Action<STATE>(private val initialState: () -> STATE) : KarmaAction<STATE> 
 
     private var stateHolder: STATE? = null
 
-    private val context = KarmaContext(this::executeFn)
+    private val context = KarmaContext(this::executeFn, this::currentState)
 
     override fun attach(owner: LifecycleOwner, onStateChange: (STATE) -> Unit) {
         if (owner.lifecycle.currentState.isAtLeast(Lifecycle.State.INITIALIZED)) {
