@@ -40,4 +40,6 @@ abstract class UiPresenter<STATE> : KarmaPresenter<STATE> {
             setState(change)
         }
     }
+
+    protected fun getState() = action.currentState
 }

@@ -1,15 +1,16 @@
 package stream.nolambda.karma
 
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelStoreOwner
+import androidx.lifecycle.*
 import stream.nolambda.karma.config.ActionExecutorFactory
 import stream.nolambda.karma.config.DefaultActionExecutorFactory
+import stream.nolambda.karma.observer.DefaultStateObserverFactory
+import stream.nolambda.karma.observer.StateObserverFactory
 import stream.nolambda.karma.ui.PresenterHolder
 
 object Karma {
     var isTestMode: Boolean = false
     var executor: ActionExecutorFactory = DefaultActionExecutorFactory()
+    var stateObserver: StateObserverFactory = DefaultStateObserverFactory()
     var enableLog = false
 
     fun setTestMode() {
