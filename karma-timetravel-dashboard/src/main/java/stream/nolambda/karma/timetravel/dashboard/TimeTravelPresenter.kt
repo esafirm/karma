@@ -1,6 +1,6 @@
 package stream.nolambda.karma.timetravel.dashboard
 
-import stream.nolambda.karma.differ.asSingleEvent
+import stream.nolambda.karma.differ.asEvent
 import stream.nolambda.karma.timetravel.TimeTravelAction
 import stream.nolambda.karma.timetravel.TimeTravelEventManager
 import stream.nolambda.karma.ui.UiPresenter
@@ -48,7 +48,7 @@ class TimeTravelPresenter :
             replaceStateEvent = ReplaceStateEvent(
                 oldState = oldStateObj,
                 newState = newStateObj
-            ).asSingleEvent()
+            ).asEvent()
         )
     }
 

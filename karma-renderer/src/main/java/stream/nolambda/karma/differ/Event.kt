@@ -1,6 +1,6 @@
 package stream.nolambda.karma.differ
 
-class SingleEvent<out T>(private val value: T) {
+class Event<out T>(private val value: T) {
     private var fetched: Boolean = false
 
     fun get(setFlag: Boolean = true): T? {
@@ -10,14 +10,14 @@ class SingleEvent<out T>(private val value: T) {
     }
 }
 
-inline fun <T> SingleEvent<T>?.fetch(block: T.() -> Unit) {
+inline fun <T> Event<T>?.fetch(block: T.() -> Unit) {
     val value = this?.get()
     if (value != null) {
         block.invoke(value)
     }
 }
 
-inline fun <T> SingleEvent<T>?.fetchCondition(block: T.() -> Boolean) {
+inline fun <T> Event<T>?.fetchCondition(block: T.() -> Boolean) {
     val value = this?.get(false)
     if (value != null) {
         val result = block.invoke(value)
@@ -28,4 +28,4 @@ inline fun <T> SingleEvent<T>?.fetchCondition(block: T.() -> Boolean) {
     }
 }
 
-fun <T> T.asSingleEvent() = SingleEvent(this)
+fun <T> T.asEvent() = Event(this)
