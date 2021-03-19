@@ -3,6 +3,8 @@ package stream.nolambda.karma.ui
 import androidx.lifecycle.LifecycleOwner
 import stream.nolambda.karma.*
 
+typealias ValueCreator<T> = (T) -> T
+
 abstract class UiPresenter<STATE> : KarmaPresenter<STATE> {
 
     private fun defaultInitialState(): Nothing = TODO(
@@ -31,15 +33,37 @@ abstract class UiPresenter<STATE> : KarmaPresenter<STATE> {
     /* > Helper / Sugar */
     /* --------------------------------------------------- */
 
+    protected open fun onError(e: Exception) {
+        throw e
+    }
+
     protected fun execute(block: suspend KarmaContext<STATE>.() -> Unit) {
-        action.execute(block)
+        action.execute {
+            try {
+                block.invoke(this)
+            } catch (e: Exception) {
+                onError(e)
+            }
+        }
     }
 
     protected fun setState(change: StateChange<STATE>) {
         action.execute {
-            setState(change)
+            try {
+                setState(change)
+            } catch (e: Exception) {
+                onError(e)
+            }
         }
     }
 
     protected fun getState() = action.currentState
+
+    fun <T> usePartial(copy: STATE.(ValueCreator<T>) -> STATE): (ValueCreator<T>) -> Unit {
+        return { newValueCreator ->
+            setState {
+                copy(this, newValueCreator)
+            }
+        }
+    }
 }

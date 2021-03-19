@@ -7,7 +7,7 @@ import nolambda.github.usersearch.data.User
 import nolambda.github.usersearch.utils.call
 import stream.nolambda.karma.Action
 import stream.nolambda.karma.KarmaAction
-import stream.nolambda.karma.differ.asSingleEvent
+import stream.nolambda.karma.differ.asEvent
 import stream.nolambda.karma.timetravel.TimeTravel
 import stream.nolambda.karma.timetravel.TimeTravelAction
 import stream.nolambda.karma.timetravel.TimeTravelEventListener
@@ -40,7 +40,7 @@ class UserSearchPresenter(
     }
 
     private fun showError(err: Throwable) = setState {
-        copy(err = err.asSingleEvent(), isLoading = false)
+        copy(err = err.asEvent(), isLoading = false)
     }
 
     private fun showEmptyPage() = setState { UserSearchState() }

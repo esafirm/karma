@@ -4,17 +4,8 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 import stream.nolambda.karma.Karma
 import stream.nolambda.karma.bindTest
-
-class TestPresenter : UiPresenter<String>() {
-    override fun initialState(): String = "Initial"
-    fun setup() = setState { "1" }
-    fun testing() = setState { "ABCD" }
-
-    fun testExecute() = execute {
-        setState { "1" }
-        setState { "2" }
-    }
-}
+import stream.nolambda.karma.ui.fake.PartialUpdatePresenter
+import stream.nolambda.karma.ui.fake.TestPresenter
 
 class UiPresenterSpec : StringSpec({
 
@@ -31,5 +22,14 @@ class UiPresenterSpec : StringSpec({
         presenter.testExecute()
 
         getState() shouldBe "2"
+    }
+
+    "it should update the nested value" {
+        val (p, g) = Karma.bindTest { PartialUpdatePresenter() }
+
+        val expectedValue = "ABC123"
+        p.setValue(expectedValue)
+
+        g()?.nested?.value shouldBe expectedValue
     }
 })

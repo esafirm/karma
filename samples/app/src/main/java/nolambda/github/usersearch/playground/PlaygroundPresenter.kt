@@ -1,24 +1,74 @@
 package nolambda.github.usersearch.playground
 
 import kotlinx.coroutines.delay
+import stream.nolambda.karma.differ.Async
 import stream.nolambda.karma.ui.UiPresenter
 
-class PlaygroundPresenter : UiPresenter<String>() {
-    override fun initialState(): String = ""
+class PlaygroundPresenter : UiPresenter<PlaygroundState>() {
+    override fun initialState() = PlaygroundState()
 
-    fun actionOne() = execute {
-        setState { "Start of Action #1" }
-        Logger.log("before sleep")
+    private val setNestedState = usePartial<NestedState> {
+        copy(nestedState = it(nestedState))
+    }
+
+    private val setAsync = usePartial<Async<String>> { copy(asyncValue = it(asyncValue)) }
+
+    fun testBlocking() {
+        actionOne()
+        actionTwo()
+        actionThree()
+    }
+
+    fun testError() {
+        setState {
+            error("A")
+        }
+        execute {
+            delay(1000)
+            error("B")
+        }
+    }
+
+    fun testPartialState() {
+        setNestedState {
+            it.copy(componentFirst = "ABC")
+        }
+        setState {
+            copy(log = "${log}\n${nestedState.componentFirst}")
+        }
+    }
+
+    fun testAsync() = execute {
+        setAsync { Async.loading() }
         delay(1000)
-        setState { "End of Action #1 | Before $this" }
+        setAsync { Async.failure(Throwable("unknown error")) }
+        delay(1000)
+        setAsync { Async.success("Success") }
     }
 
-    fun actionTwo() = execute {
+    /* --------------------------------------------------- */
+    /* > Private */
+    /* --------------------------------------------------- */
+
+    override fun onError(e: Exception) {
+        addLog("Error happen: ${e.message}")
+    }
+
+    private fun actionOne() = execute {
+        addLog("before sleep")
+        delay(1000)
+        addLog("End of Action #1 | Before $this")
+    }
+
+    private fun actionTwo() = execute {
         delay(500)
-        setState { "Action #2" }
+        addLog("Action #2")
     }
 
-    fun actionThree() = setState {
-        "Action #3 | Before $this"
+    private fun actionThree() = addLog("Action #3 | Before $this")
+
+    private fun addLog(newLog: String) {
+        setState { copy(log = "${log}\n${newLog}") }
     }
+
 }

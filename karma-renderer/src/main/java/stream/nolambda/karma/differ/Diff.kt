@@ -88,7 +88,7 @@ open class DiffBuilder<S : Any, A> {
     }
 
     fun <T> event(
-        get: (S) -> SingleEvent<T>?,
+        get: (S) -> Event<T>?,
         set: A.(T) -> Unit
     ) {
         binders += object : ViewRenderer<S, A> {
