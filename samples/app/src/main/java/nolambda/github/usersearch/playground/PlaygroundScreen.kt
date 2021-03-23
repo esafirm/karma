@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import nolambda.github.usersearch.databinding.ScreenPlaygroundBinding
 import stream.nolambda.karma.bind
+import stream.nolambda.karma.differ.fetch
 import stream.nolambda.karma.differ.renderer
 import stream.nolambda.karma.ui.screens.ActivityScreen
 import stream.nolambda.karma.ui.screens.viewBinding

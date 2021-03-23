@@ -1,5 +1,7 @@
 package stream.nolambda.karma
 
+import androidx.activity.ComponentActivity
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.*
 import stream.nolambda.karma.config.ActionExecutorFactory
 import stream.nolambda.karma.config.DefaultActionExecutorFactory
@@ -53,9 +55,16 @@ object Karma {
 /**
  * extension function for [Karma.bind]
  */
-fun <S, O, P : KarmaPresenter<S>> O.bind(
+fun <S, P : KarmaPresenter<S>> Fragment.bind(
     presenter: () -> P,
     render: (S, P) -> Unit
-) where O : LifecycleOwner, O : ViewModelStoreOwner {
+) {
+    Karma.bind(viewLifecycleOwner, this, presenter, render)
+}
+
+fun <S, P : KarmaPresenter<S>> ComponentActivity.bind(
+    presenter: () -> P,
+    render: (S, P) -> Unit
+) {
     Karma.bind(this, this, presenter, render)
 }

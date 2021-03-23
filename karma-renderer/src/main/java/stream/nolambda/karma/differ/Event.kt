@@ -1,6 +1,11 @@
 package stream.nolambda.karma.differ
 
-class Event<out T>(private val value: T) {
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+import kotlinx.android.parcel.RawValue
+
+@Parcelize
+class Event<out T>(private val value: @RawValue T) : Parcelable {
     private var fetched: Boolean = false
 
     fun get(setFlag: Boolean = true): T? {
