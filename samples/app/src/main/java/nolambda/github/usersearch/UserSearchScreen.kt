@@ -3,6 +3,7 @@ package nolambda.github.usersearch
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import nolambda.github.usersearch.customsavestate.CustomSaveStateScreen
 import nolambda.github.usersearch.databinding.ScreenUserSearchBinding
 import nolambda.github.usersearch.playground.PlaygroundScreen
 import nolambda.github.usersearch.utils.onTextChange
@@ -21,6 +22,7 @@ class UserSearchScreen : ActivityScreen() {
     companion object {
         private const val MENU_TIME_TRAVEL_DASHBOARD = 111
         private const val MENU_PLAYGROUND = 222
+        private const val MENU_CUSTOM_SAVE = 223
     }
 
     private val adapter by lazy { UserAdapter(this) }
@@ -70,7 +72,8 @@ class UserSearchScreen : ActivityScreen() {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menu?.add(0, MENU_TIME_TRAVEL_DASHBOARD, 1, "Time Travel Dashboard")
-        menu?.add(1, MENU_PLAYGROUND, 1, "Playground")
+        menu?.add(0, MENU_PLAYGROUND, 1, "Playground")
+        menu?.add(0, MENU_CUSTOM_SAVE, 1, "Custom Save State")
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -78,6 +81,7 @@ class UserSearchScreen : ActivityScreen() {
         when (item.itemId) {
             MENU_TIME_TRAVEL_DASHBOARD -> TimeTravelDashboard.show(supportFragmentManager)
             MENU_PLAYGROUND -> PlaygroundScreen.start(this)
+            MENU_CUSTOM_SAVE -> CustomSaveStateScreen.start(this)
         }
         return super.onOptionsItemSelected(item)
     }

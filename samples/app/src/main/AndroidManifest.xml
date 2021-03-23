@@ -21,6 +21,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".playground.PlaygroundScreen" />
+        <activity android:name=".customsavestate.CustomSaveStateScreen" />
     </application>
 
 </manifest>

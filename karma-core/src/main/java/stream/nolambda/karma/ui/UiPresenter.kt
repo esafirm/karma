@@ -7,8 +7,9 @@ import stream.nolambda.karma.savedstate.SavedStateHandler
 
 typealias ValueCreator<T> = (T) -> T
 
-abstract class UiPresenter<STATE> : KarmaPresenter<STATE>,
-    SavedStateHandler<STATE> by DefaultSavedStateHandler<STATE>() {
+abstract class UiPresenter<STATE>(
+    private val savedStateHandler: SavedStateHandler<STATE> = DefaultSavedStateHandler()
+) : KarmaPresenter<STATE>, SavedStateHandler<STATE> by savedStateHandler {
 
     private fun defaultInitialState(): Nothing = TODO(
         """

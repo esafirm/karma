@@ -11,23 +11,17 @@ import androidx.lifecycle.SavedStateHandle
 import java.io.Serializable
 import java.util.*
 
-class DefaultSavedStateHandler<STATE> : SavedStateHandler<STATE> {
+class DefaultSavedStateHandler<STATE> : AbsSavedStateHandler<STATE>() {
 
-    private lateinit var savedState: SavedStateHandle
-    private var lastState: STATE? = null
-
-    override fun init(savedStateHandle: SavedStateHandle) {
-        savedState = savedStateHandle
-        lastState = savedStateHandle[KEY_STATE]
+    override fun mapToState(savedStateHandle: SavedStateHandle): STATE? {
+        return savedStateHandle[KEY_STATE]
     }
 
-    override fun saveToSavedState(state: STATE) {
+    override fun mapToStateHandle(savedStateHandle: SavedStateHandle, state: STATE) {
         if (isValidState(state)) {
-            savedState[KEY_STATE] = state
+            savedStateHandle[KEY_STATE] = state
         }
     }
-
-    override fun getSavedState(): STATE? = lastState
 
     private fun isValidState(value: Any?): Boolean {
         if (value == null) {
