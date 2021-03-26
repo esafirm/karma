@@ -2,10 +2,14 @@ package stream.nolambda.karma.ui
 
 import androidx.lifecycle.LifecycleOwner
 import stream.nolambda.karma.*
+import stream.nolambda.karma.savedstate.DefaultSavedStateHandler
+import stream.nolambda.karma.savedstate.SavedStateHandler
 
 typealias ValueCreator<T> = (T) -> T
 
-abstract class UiPresenter<STATE> : KarmaPresenter<STATE> {
+abstract class UiPresenter<STATE>(
+    private val savedStateHandler: SavedStateHandler<STATE> = DefaultSavedStateHandler()
+) : KarmaPresenter<STATE>, SavedStateHandler<STATE> by savedStateHandler {
 
     private fun defaultInitialState(): Nothing = TODO(
         """
@@ -15,7 +19,9 @@ abstract class UiPresenter<STATE> : KarmaPresenter<STATE> {
         """.trimIndent()
     )
 
-    protected open val action: KarmaAction<STATE> = Action(::initialState)
+    protected open val action: KarmaAction<STATE> = Action {
+        getSavedState() ?: initialState()
+    }
 
     open fun initialState(): STATE = defaultInitialState()
 
@@ -24,7 +30,10 @@ abstract class UiPresenter<STATE> : KarmaPresenter<STATE> {
     }
 
     override fun attach(owner: LifecycleOwner, onStateChange: (STATE) -> Unit) {
-        action.attach(owner, onStateChange)
+        action.attach(owner) {
+            saveToSavedState(it)
+            onStateChange(it)
+        }
 
         onAttach(owner)
     }

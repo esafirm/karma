@@ -1,44 +1,10 @@
 package stream.nolambda.karma.differ
 
+import java.io.Serializable
+
 class Async<T>(
-    private val value: Any = Uninitialized
-) {
-    val isLoading: Boolean get() = value is Loading
-    val isError: Boolean get() = value is Failure
-    val isUninitialized: Boolean get() = value is Uninitialized
-
-    val isSuccess: Boolean get() = !isUninitialized && !isLoading && !isError
-
-    @Suppress("UNCHECKED_CAST")
-    fun get(): T = value as T
-
-    fun getOrNull(): T? = when {
-        isSuccess -> get()
-        else -> null
-    }
-
-    fun getErrorOrNull() = when (value) {
-        is Failure -> value.err
-        else -> null
-    }
-
-    inline fun fetch(
-        onSuccess: (T) -> Unit = {},
-        onError: (Throwable) -> Unit = {},
-        onLoading: () -> Unit = {},
-        onUninitialized: () -> Unit = {}
-    ) {
-        when {
-            isLoading -> onLoading()
-            isError -> onError(getErrorOrNull() ?: NullPointerException("No error in Async"))
-            isSuccess -> onSuccess(get())
-            isUninitialized -> onUninitialized()
-        }
-    }
-
-    internal object Loading
-    internal object Uninitialized
-    internal class Failure(val err: Throwable)
+    private val value: Any = AsyncImplementation.Uninitialized
+) : AsyncInterface<T> by AsyncImplementation(value), Serializable {
 
     override fun equals(other: Any?): Boolean {
         if (other is Async<*>) {
@@ -53,7 +19,9 @@ class Async<T>(
 
     companion object {
         fun <T : Any> success(value: T): Async<T> = Async(value)
-        fun <T> failure(exception: Throwable): Async<T> = Async(Failure(exception))
-        fun <T> loading(): Async<T> = Async(Loading)
+        fun <T> failure(exception: Throwable): Async<T> =
+            Async(AsyncImplementation.Failure(exception))
+
+        fun <T> loading(): Async<T> = Async(AsyncImplementation.Loading)
     }
 }
