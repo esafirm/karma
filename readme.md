@@ -1,3 +1,5 @@
+![OSS Karma Banner](https://user-images.githubusercontent.com/1691440/126062755-14406395-bf78-47f1-9445-0677a877b33e.gif)
+
 ## Karma
 
 A library that provide an opinionated way to create Android app with MVI pattern.
