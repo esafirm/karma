@@ -22,10 +22,11 @@ In your module `build.gradle`
 
 ```groovy
 dependencies {
-  implementation 'com.github.esafirm.karma:karma-core:1.0.0'
-  implementation 'com.github.esafirm.karma:karma-renderer:1.0.0'
-  implementation 'com.github.esafirm.karma:karma-timetravel:1.0.0'
-  implementation 'com.github.esafirm.karma:karma-timetravel-dashboard:1.0.0'
+  final karmaVersion = "1.3.0"
+  implementation "com.github.esafirm.karma:karma-core:$karmaVersion"
+  implementation "com.github.esafirm.karma:karma-renderer:$karmaVersion"
+  implementation "com.github.esafirm.karma:karma-timetravel:$karmaVersion"
+  implementation "com.github.esafirm.karma:karma-timetravel-dashboard:$karmaVersion"
 }
 ```
 

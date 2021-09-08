@@ -42,7 +42,7 @@ abstract class UiPresenter<STATE>(
     /* > Helper / Sugar */
     /* --------------------------------------------------- */
 
-    protected open fun onError(e: Exception) {
+    protected open fun KarmaContext<STATE>.onError(e: Exception) {
         throw e
     }
 

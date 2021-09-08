@@ -1,6 +1,7 @@
 package nolambda.github.usersearch.playground
 
 import kotlinx.coroutines.delay
+import stream.nolambda.karma.KarmaContext
 import stream.nolambda.karma.differ.Async
 import stream.nolambda.karma.ui.UiPresenter
 
@@ -25,8 +26,14 @@ class PlaygroundPresenter : UiPresenter<PlaygroundState>() {
         }
         execute {
             delay(1000)
+            errorFromSuspend()
             error("B")
         }
+    }
+
+    private suspend fun errorFromSuspend() {
+        delay(1)
+        error("Error from suspend function")
     }
 
     fun testPartialState() {
@@ -50,8 +57,11 @@ class PlaygroundPresenter : UiPresenter<PlaygroundState>() {
     /* > Private */
     /* --------------------------------------------------- */
 
-    override fun onError(e: Exception) {
+    override fun KarmaContext<PlaygroundState>.onError(e: Exception) {
         addLog("Error happen: ${e.message}")
+        setState {
+            copy(log = "FROM ERRPR")
+        }
     }
 
     private fun actionOne() = execute {
