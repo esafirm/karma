@@ -1,3 +1,50 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        google()
+        maven {
+            setUrl("https://maven.pkg.jetbrains.space/public/p/compose/dev")
+        }
+    }
+}
+
+plugins {
+    id "com.gradle.enterprise" version "3.12.4"
+}
+
+gradleEnterprise {
+    buildScan {
+        termsOfServiceUrl = "https://gradle.com/terms-of-service"
+        termsOfServiceAgree = "yes"
+        publishAlways()
+    }
+}
+
+final secretProps = new Properties()
+file("secret.properties").withInputStream { secretProps.load(it) }
+
+dependencyResolutionManagement {
+    repositories {
+        google()
+        mavenCentral()
+        mavenLocal()
+        maven {
+            setUrl('https://jitpack.io')
+        }
+        maven {
+            setUrl("https://maven.pkg.jetbrains.space/public/p/compose/dev")
+        }
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/qawaz/compose-code-editor")
+            credentials {
+                username = secretProps.get('github.username')
+                password = secretProps.get('github.token')
+            }
+        }
+    }
+}
+
 include ':karma-timetravel-dashboard'
 include ':karma-renderer'
 include ':karma-timetravel'

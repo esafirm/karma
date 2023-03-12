@@ -4,24 +4,23 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import stream.nolambda.karma.bind
 import stream.nolambda.karma.timetravel.dashboard.EditStateInfo
-import stream.nolambda.karma.timetravel.dashboard.databinding.RendererStateEditorBinding
 import stream.nolambda.karma.ui.StaticPresenter
 
 class StateEditorActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val binding = RendererStateEditorBinding.inflate(layoutInflater)
-        setContentView(binding.root)
 
+        val composeView = ComposeView(this)
         val passedState: EditStateInfo =
             intent.extras?.getSerializable(EXTRA_STATE_INFO) as? EditStateInfo
                 ?: error("no current state")
 
-        val renderer = stateEditorRenderer(binding, object : StateEditorListener {
+        val renderer = stateEditorRenderer(composeView, object : StateEditorListener {
             override fun onSave(state: EditorState) {
                 val dataIntent = Intent().apply {
                     putExtra(RESULT_EXTRA_NEW_STATE, state.stateString)

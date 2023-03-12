@@ -8,3 +8,6 @@
 .externalNativeBuild
 .cxx
 .kotlintest
+
+## Secret
+secret.properties

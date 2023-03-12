@@ -1,9 +1,23 @@
 package stream.nolambda.karma.timetravel.dashboard.editor
 
-import de.markusressel.kodehighlighter.core.util.EditTextHighlighter
-import de.markusressel.kodehighlighter.language.json.JsonRuleBook
-import stream.nolambda.karma.differ.renderer
-import stream.nolambda.karma.timetravel.dashboard.databinding.RendererStateEditorBinding
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.Button
+import androidx.compose.material.OutlinedTextField
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.TextFieldValue
+import com.wakaztahir.codeeditor.model.CodeLang
+import com.wakaztahir.codeeditor.prettify.PrettifyParser
+import com.wakaztahir.codeeditor.theme.CodeThemeType
+import com.wakaztahir.codeeditor.utils.parseCodeAsAnnotatedString
+import stream.nolambda.karma.differ.ViewRenderer
+import stream.nolambda.karma.timetravel.dashboard.R
 import stream.nolambda.karma.ui.StaticPresenter
 
 data class EditorState(
@@ -15,20 +29,57 @@ interface StateEditorListener {
 }
 
 fun stateEditorRenderer(
-    binding: RendererStateEditorBinding,
-    listener: StateEditorListener
-) = renderer<EditorState, StaticPresenter<EditorState>> {
-    init {
+    composeView: ComposeView,
+    listener: StateEditorListener,
+) = object : ViewRenderer<EditorState, StaticPresenter<EditorState>> {
+    override fun render(state: EditorState, action: StaticPresenter<EditorState>) {
+        composeView.setContent {
+            StateEditor(state = state, onSave = { listener.onSave(state) })
+        }
+    }
+}
 
-        val editTextHighlighter = EditTextHighlighter(
-            target = binding.inpStateEditor,
-            languageRuleBook = JsonRuleBook()
+@Composable
+private fun StateEditor(
+    state: EditorState,
+    onSave: () -> Unit,
+) {
+    val language = CodeLang.JSON
+
+    val parser = remember { PrettifyParser() } // try getting from LocalPrettifyParser.current
+    val theme = CodeThemeType.Monokai.theme
+
+    val parsedCode = remember {
+        parseCodeAsAnnotatedString(
+            parser = parser,
+            theme = theme,
+            lang = language,
+            code = state.stateString
         )
-        editTextHighlighter.start()
+    }
 
-        binding.inpStateEditor.setText(it.stateString)
-        binding.btnSave.setOnClickListener {
-            listener.onSave(EditorState(binding.inpStateEditor.text.toString()))
+    val textFieldValue = remember {
+        mutableStateOf(
+            TextFieldValue(
+                annotatedString = parseCodeAsAnnotatedString(
+                    parser = parser,
+                    theme = theme,
+                    lang = language,
+                    code = parsedCode.text
+                )
+            )
+        )
+    }
+
+    Row {
+        OutlinedTextField(
+            modifier = Modifier.fillMaxSize(),
+            value = textFieldValue.value,
+            onValueChange = { textFieldValue.value = it },
+            label = { Text("State") }
+        )
+        Button(onClick = onSave) {
+            Text(text = stringResource(id = R.string.save_state))
         }
     }
 }
