@@ -1,16 +1,16 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
-    id 'kotlin-android-extensions'
     id 'org.jetbrains.kotlin.plugin.serialization' version '1.4.10'
 }
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion rootProject.ext.compileSdk
 
     defaultConfig {
-        minSdkVersion 21
-        targetSdkVersion 30
+        minSdkVersion rootProject.ext.minSdk
+        targetSdkVersion rootProject.ext.targetSdk
+
         versionCode 1
         versionName "1.0"
 
@@ -42,6 +42,7 @@ android {
             useJUnitPlatform()
         }
     }
+    namespace 'nolambda.github.usersearch'
 }
 
 dependencies {
