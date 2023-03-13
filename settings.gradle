@@ -45,6 +45,8 @@ dependencyResolutionManagement {
     }
 }
 
+includeBuild('build-logic')
+
 include ':karma-timetravel-dashboard'
 include ':karma-renderer'
 include ':karma-timetravel'

@@ -1,0 +1,49 @@
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
+    id 'kotlin-parcelize'
+}
+
+final properties = new Properties()
+file("${rootDir.path}/build-logic/gradle.properties").withInputStream { properties.load(it) }
+
+android {
+    compileSdk properties.get("versions.compileSdk").toInteger()
+
+    defaultConfig {
+        minSdkVersion properties.get("versions.minSdk")
+        targetSdkVersion properties.get("versions.targetSdk")
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildFeatures {
+        viewBinding true
+        compose true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.4.0-alpha02"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
+}
+
+dependencies {
+    // Compose BoM
+    implementation platform('androidx.compose:compose-bom:2023.01.00')
+}
