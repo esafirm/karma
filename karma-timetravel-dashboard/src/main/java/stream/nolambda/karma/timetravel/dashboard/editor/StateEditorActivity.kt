@@ -16,6 +16,8 @@ class StateEditorActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         val composeView = ComposeView(this)
+        setContentView(composeView)
+
         val passedState: EditStateInfo =
             intent.extras?.getSerializable(EXTRA_STATE_INFO) as? EditStateInfo
                 ?: error("no current state")
