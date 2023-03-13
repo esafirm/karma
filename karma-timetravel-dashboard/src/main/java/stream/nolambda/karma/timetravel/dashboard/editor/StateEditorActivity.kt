@@ -15,12 +15,14 @@ class StateEditorActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val composeView = ComposeView(this)
-        setContentView(composeView)
+        title = "Edit State"
 
         val passedState: EditStateInfo =
             intent.extras?.getSerializable(EXTRA_STATE_INFO) as? EditStateInfo
                 ?: error("no current state")
+
+        val composeView = ComposeView(this)
+        setContentView(composeView)
 
         val renderer = stateEditorRenderer(composeView, object : StateEditorListener {
             override fun onSave(state: EditorState) {
