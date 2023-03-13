@@ -1,9 +1,3 @@
 plugins {
     id 'groovy-gradle-plugin'
 }
-
-ext {
-    minSdk = 23
-    compileSdk = 33
-    targetSdk = 33
-}

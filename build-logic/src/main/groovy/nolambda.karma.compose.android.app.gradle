@@ -1,5 +1,5 @@
 plugins {
-    id 'com.android.library'
+    id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-parcelize'
 }
@@ -40,12 +40,6 @@ android {
 
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
-    }
-
-    testOptions {
-        unitTests.all {
-            useJUnitPlatform()
-        }
     }
 }
 
