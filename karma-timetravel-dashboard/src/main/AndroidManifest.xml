@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <application>
-        <activity android:name=".editor.StateEditorActivity" />
+        <activity
+            android:name=".editor.StateEditorActivity"
+            android:theme="@android:style/Theme.Material.NoActionBar" />
     </application>
 </manifest>

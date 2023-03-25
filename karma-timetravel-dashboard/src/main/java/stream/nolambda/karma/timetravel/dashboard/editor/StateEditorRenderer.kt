@@ -28,15 +28,15 @@ import stream.nolambda.karma.differ.ViewRenderer
 import stream.nolambda.karma.timetravel.dashboard.R
 import stream.nolambda.karma.ui.StaticPresenter
 
-data class EditorState(
+internal data class EditorState(
     val stateString: String,
 )
 
-interface StateEditorListener {
+internal interface StateEditorListener {
     fun onSave(state: EditorState)
 }
 
-fun stateEditorRenderer(
+internal fun stateEditorRenderer(
     composeView: ComposeView,
     listener: StateEditorListener,
 ) = object : ViewRenderer<EditorState, StaticPresenter<EditorState>> {

@@ -2,24 +2,26 @@ package stream.nolambda.karma.timetravel.dashboard.editor
 
 import android.app.Activity
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import androidx.activity.ComponentActivity
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import stream.nolambda.karma.bind
 import stream.nolambda.karma.timetravel.dashboard.EditStateInfo
 import stream.nolambda.karma.ui.StaticPresenter
+import java.io.Serializable
 
-class StateEditorActivity : AppCompatActivity() {
+class StateEditorActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        title = "Edit State"
-
-        val passedState: EditStateInfo =
-            intent.extras?.getSerializable(EXTRA_STATE_INFO) as? EditStateInfo
-                ?: error("no current state")
+        val passedState: EditStateInfo = intent.getSerializable(
+            EXTRA_STATE_INFO,
+            EditStateInfo::class.java
+        ) ?: error("No state info passed")
 
         val composeView = ComposeView(this)
         setContentView(composeView)
@@ -37,6 +39,15 @@ class StateEditorActivity : AppCompatActivity() {
             presenter = { StaticPresenter(EditorState(passedState.state)) },
             render = renderer::render
         )
+    }
+
+    @Suppress("UNCHECKED_CAST", "DEPRECATION")
+    private fun <T : Serializable> Intent.getSerializable(extra: String, clazz: Class<T>): T? {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            getSerializableExtra(extra, clazz)
+        } else {
+            extras?.getSerializable(extra) as? T
+        }
     }
 
     companion object {
